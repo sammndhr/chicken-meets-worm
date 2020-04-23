@@ -25,11 +25,11 @@ export default class Display {
     return game
   }
 
-  printGame() {
+  renderGame() {
     document.body.appendChild(this.game)
   }
 
-  printWorld() {
+  renderWorld() {
     const world = this.createElement('canvas', null, 'world')
     world.width = this.worldSize.width
     world.height = this.worldSize.height
