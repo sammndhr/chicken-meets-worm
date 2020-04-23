@@ -3,7 +3,7 @@
  */
 
 export default class Display {
-  constructor(width = 400, height = 700) {
+  constructor({ width = 400, height = 700 }) {
     this.game = null
     this.worldSize = { width, height }
   }
@@ -34,5 +34,6 @@ export default class Display {
     world.width = this.worldSize.width
     world.height = this.worldSize.height
     this.game.append(world)
+    this.world = world
   }
 }

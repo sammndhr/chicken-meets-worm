@@ -1,11 +1,13 @@
-import Display from './Display.js'
-
-export default class World extends Display {
-  constructor() {
-    super()
-    this.canvas = null
-    this.size = { width: null, height: null }
+export default class World {
+  constructor(display) {
+    this.display = display
+    this.canvas = display.world
+    this.size = this.display.worldSize
     this.bounds = { top: null, right: null, bottom: null, right: null }
+  }
+
+  setBounds(bounds) {
+    this.bounds = bounds
   }
 
   getBounds() {
@@ -13,12 +15,12 @@ export default class World extends Display {
       left = 0,
       bottom = this.canvas.height,
       right = this.canvas.width
-    this.bounds = { top, right, bottom, left }
-    return this.bounds
+
+    return { top, right, bottom, left }
   }
 
   init() {
-    this.canvas = this.getElement('#world')
-    this.size = { width: this.canvas.width, height: this.canvas.height }
+    const bounds = this.getBounds()
+    this.setBounds(bounds)
   }
 }
