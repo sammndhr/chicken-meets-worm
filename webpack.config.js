@@ -6,13 +6,13 @@ module.exports = {
   mode: 'development',
   entry: {
     app: './src/index.js',
-    print: './src/print.js',
   },
   plugins: [
     new CleanWebpackPlugin(),
     // Will create index.html and put it in dist.
     new HtmlWebpackPlugin({
       title: 'Wings Over Water',
+      favicon: './public/favicon.ico',
     }),
   ],
   output: {

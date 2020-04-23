@@ -1,3 +1,17 @@
-.hello {
-  color: red;
+* {
+  box-sizing: border-box;
+}
+
+html {
+  text-align: center;
+  font-size: 1rem;
+  font-family: sans-serif;
+}
+
+.game {
+  margin: 4rem auto;
+}
+
+#world {
+  border: 2px solid black;
 }

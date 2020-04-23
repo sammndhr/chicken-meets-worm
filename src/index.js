@@ -1,15 +1,15 @@
-import printMe from './print.js'
+import Display from './Display.js'
 import './style.css'
-function component() {
-  const element = document.createElement('div')
-  const btn = document.createElement('button')
-  btn.innerHTML = 'Click me and check the console!'
 
-  element.innerHTML = 'Hello'
-  element.classList.add('hello')
-  element.appendChild(btn)
-  btn.onclick = printMe
-  return element
+class Game extends Display {
+  constructor() {
+    super()
+  }
+  init() {
+    this.createGame()
+    this.printGame()
+    this.printWorld()
+  }
 }
-
-document.body.appendChild(component())
+const game = new Game()
+game.init()
