@@ -3,6 +3,30 @@ import MovingObject from './MovingObject'
 export default class Parent extends MovingObject {
   constructor(pos, radius = 13, world, color = '#7280f6') {
     super(pos, radius, world, color)
+    this.children = []
+    this.childCount = 0
+  }
+
+  setChildCount = (count) => {
+    this.childCount = count
+  }
+
+  incrementChildCount = () => {
+    let count = this.childCount
+    count++
+    this.setChildCount(count)
+  }
+
+  appendChild = (child) => {
+    // shallow copy
+    const children = this.children.slice()
+    if (!children.includes(child)) {
+      children.push(child)
+      this.children = children
+      child.chainPos = this.childCount
+      child.parent = this
+      this.incrementChildCount()
+    }
   }
 
   move = (pos) => {

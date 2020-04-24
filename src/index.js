@@ -34,7 +34,7 @@ class Game {
     }
     for (const child of this.children) {
       child.draw(ctx)
-      child.collide(this.parentBird)
+      child.checkCollision(this.parentBird)
       child.move()
     }
     window.requestAnimationFrame(this.draw)
@@ -72,7 +72,7 @@ class Game {
       predators.push(predator)
     }
 
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < 3; i++) {
       const child = new Child(initialPos, radius, world)
       child.setRandomDir()
       children.push(child)

@@ -12,6 +12,7 @@ export default class MovingObject {
     this.color = color
     this.vel = vel
     this.currDir = [0, 0]
+    this.move = this.move.bind(this)
   }
 
   setPos = (pos) => {
@@ -84,21 +85,37 @@ export default class MovingObject {
     }
   }
 
-  collide(parent) {
-    const pPos = parent.pos,
-      pR = parent.radius,
+  checkCollision(obj) {
+    // Note: obj.constructor.name won't work with IE and there are some caveats. More info --> https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/name
+    const instanceOf = obj.constructor.name,
+      pPos = obj.pos,
+      pR = obj.radius,
       { x, y } = this.pos,
       rangeX = [pPos.x - pR, pPos.x + pR],
-      rangeY = [pPos.y - pR, pPos.y + pR]
-    if (
-      (inRange(x - this.radius, ...rangeX) ||
-        inRange(x + this.radius, ...rangeX)) &&
-      (inRange(y - this.radius, ...rangeY) ||
-        inRange(y + this.radius, ...rangeY))
-    ) {
-      console.log('colliding')
+      rangeY = [pPos.y - pR, pPos.y + pR],
+      collided =
+        (inRange(x - this.radius, ...rangeX) ||
+          inRange(x + this.radius, ...rangeX)) &&
+        (inRange(y - this.radius, ...rangeY) ||
+          inRange(y + this.radius, ...rangeY))
+
+    if (!collided) return
+
+    if (instanceOf === 'Parent') {
+      this.collideWithParent(obj)
+    } else if (instanceOf === 'Predator') {
+      this.collideWithPredator(obj)
+    } else if (instanceOf === 'Child') {
+      this.collideWithChild(obj)
     }
   }
+
+  collideWithParent(obj) {}
+
+  collideWithPredator(obj) {}
+
+  collideWithChild(obj) {}
+
   /** Draw the object on canvas */
   draw = (ctx) => {
     const { x, y } = this.pos
@@ -108,8 +125,8 @@ export default class MovingObject {
     ctx.fill()
     ctx.closePath()
   }
-
-  move = () => {
+  // Can't use @babel/plugin-proposal-class-properties. super.move() doesn't work in subclasses.
+  move() {
     let { x, y } = this.pos,
       pos = { x: x + this.currDir[0], y: y + this.currDir[1] }
 
