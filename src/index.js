@@ -1,5 +1,5 @@
 import Display from './Display.js'
-import MovingObject from './MovingObject.js'
+import Parent from './Parent.js'
 import Predator from './Predator.js'
 import './style.css'
 import World from './World.js'
@@ -46,7 +46,7 @@ class Game {
 
     const radius = 10
     const initialPos = { x: world.size.width / 2, y: world.size.height / 2 }
-    const parentBird = new MovingObject(initialPos, radius, world)
+    const parentBird = new Parent(initialPos, radius, world)
     this.parentBird = parentBird
 
     const predators = []
