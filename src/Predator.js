@@ -1,5 +1,6 @@
 import MovingObject from './MovingObject'
 import { getRandomInt } from './utils'
+
 export default class Predator extends MovingObject {
   constructor(pos, radius = 10, world, color = '#f67280') {
     super(pos, radius, world, color)
@@ -13,8 +14,8 @@ export default class Predator extends MovingObject {
   }
 
   getRandomDir = () => {
-    const dx = this.dx,
-      dy = this.dy
+    const dx = this.dx * 1.01,
+      dy = this.dy * 1.01
     /* 
     8 possible directions.
     Vertical and horizontal: 
@@ -31,16 +32,18 @@ export default class Predator extends MovingObject {
     */
 
     const possibleDirections = [
-      [dx, 0],
-      [-dx, 0],
-      [0, dy],
-      [0, -dy],
+      // 0 values off slightly so predator doesn't stick to edges.
+      [dx, 0.2],
+      [-dx, 0.3],
+      [0.15, dy],
+      [0.23, -dy],
       [dx, dy],
       [-dx, dy],
       [dx, -dy],
       [-dx, -dy],
     ]
-    const direction = possibleDirections[getRandomInt(7)]
+
+    const direction = possibleDirections[getRandomInt(8)]
     this.setCurrDir(direction)
   }
 

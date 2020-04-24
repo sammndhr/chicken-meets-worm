@@ -9,7 +9,7 @@ class Game {
     this.display = display
     this.mouse = { x: null, y: null }
     this.parentBird = null
-    this.predator = null
+    this.predators = []
     this.world = null
     this.handleMouseMove = this.handleMouseMove.bind(this)
     this.draw = this.draw.bind(this)
@@ -26,8 +26,10 @@ class Game {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     this.parentBird.draw(ctx)
-    this.predator.draw(ctx)
-    this.predator.move()
+    for (const predator of this.predators) {
+      predator.draw(ctx)
+      predator.move()
+    }
     window.requestAnimationFrame(this.draw)
   }
 
@@ -35,7 +37,9 @@ class Game {
     this.display.createGame()
     this.display.renderGame()
     this.display.renderWorld()
+
     window.addEventListener('mousemove', this.handleMouseMove, false)
+
     const world = new World(this.display)
     world.init()
     this.world = world
@@ -45,14 +49,18 @@ class Game {
     const parentBird = new MovingObject(initialPos, radius, world)
     this.parentBird = parentBird
 
-    const predator = new Predator(
-      { x: initialPos.x + 10, y: initialPos.y + 10 },
-      radius,
-      world
-    )
-    predator.getRandomDir()
+    const predators = []
+    for (let i = 0; i < 4; i++) {
+      const predator = new Predator(
+        { x: initialPos.x + 10, y: initialPos.y + 10 },
+        radius,
+        world
+      )
+      predator.getRandomDir()
+      predators.push(predator)
+    }
 
-    this.predator = predator
+    this.predators = predators
 
     window.requestAnimationFrame(this.draw)
   }
