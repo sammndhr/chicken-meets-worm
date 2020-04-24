@@ -1,5 +1,6 @@
 import Child from './Child.js'
 import Display from './Display.js'
+import Lives from './Lives.js'
 import Parent from './Parent.js'
 import Predator from './Predator.js'
 import './style.css'
@@ -30,6 +31,7 @@ class Game {
       }
     }
   }
+
   draw() {
     const canvas = this.world.canvas,
       ctx = canvas.getContext('2d')
@@ -49,11 +51,14 @@ class Game {
   }
 
   init() {
-    this.display.createGame()
     this.display.renderGame()
+    this.display.renderLives()
     this.display.renderWorld()
 
     window.addEventListener('mousemove', this.handleMouseMove, false)
+
+    const lives = new Lives(this.display)
+    lives.init()
 
     const world = new World(this.display)
     world.init()
