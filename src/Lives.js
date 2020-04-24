@@ -1,18 +1,27 @@
 export default class Lives {
   constructor(display, count = 5) {
     this.display = display
-    this.count = count
+    this.count = Math.max(count, 0)
   }
 
   incrementCount = () => {
-    this.count = this.count + 1
+    const count = this.count
+    this.count = Math.max(count + 1, 10)
+    this.updateView(this.count)
   }
 
   decrementCount = () => {
-    this.count = this.count - 1
+    const count = this.count
+    // this.count = Math.max(count - 1, 0)
+    this.count = count - 1
+    this.updateView(this.count)
+  }
+
+  updateView = (count) => {
+    this.display.updateElement('#lives', count)
   }
 
   init = () => {
-    this.display.updateElement('#lives', this.count)
+    this.updateView(this.count)
   }
 }

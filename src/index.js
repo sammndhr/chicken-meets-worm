@@ -30,6 +30,9 @@ class Game {
         child.checkCollision(predator)
       }
     }
+    for (const predator of this.predators) {
+      this.parentBird.checkCollision(predator)
+    }
   }
 
   draw() {
@@ -72,7 +75,8 @@ class Game {
     const parentBird = new Parent(
       { x: initialPos.x, y: world.size.height - 13 },
       13,
-      world
+      world,
+      lives
     )
     this.parentBird = parentBird
 

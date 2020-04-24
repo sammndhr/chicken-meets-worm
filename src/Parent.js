@@ -1,10 +1,15 @@
 import MovingObject from './MovingObject'
 
 export default class Parent extends MovingObject {
-  constructor(pos, radius = 13, world, color = '#7280f6') {
+  constructor(pos, radius = 13, world, lives, color = '#7280f6') {
     super(pos, radius, world, color)
     this.children = []
     this.childCount = 0
+    this.lives = lives
+  }
+
+  setCurrCollision = (collision) => {
+    this.currCollision = collision
   }
 
   setChildCount = (count) => {
@@ -27,6 +32,10 @@ export default class Parent extends MovingObject {
       child.parent = this
       this.incrementChildCount()
     }
+  }
+
+  collideWithPredator = (obj) => {
+    this.lives.decrementCount()
   }
 
   move = (pos) => {
