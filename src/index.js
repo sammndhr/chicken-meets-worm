@@ -1,3 +1,4 @@
+import Child from './Child.js'
 import Display from './Display.js'
 import Parent from './Parent.js'
 import Predator from './Predator.js'
@@ -10,6 +11,7 @@ class Game {
     this.mouse = { x: null, y: null }
     this.parentBird = null
     this.predators = []
+    this.children = []
     this.world = null
     this.handleMouseMove = this.handleMouseMove.bind(this)
     this.draw = this.draw.bind(this)
@@ -30,6 +32,10 @@ class Game {
       predator.draw(ctx)
       predator.move()
     }
+    for (const child of this.children) {
+      child.draw(ctx)
+      child.move()
+    }
     window.requestAnimationFrame(this.draw)
   }
 
@@ -45,22 +51,30 @@ class Game {
     this.world = world
 
     const radius = 10
-    const initialPos = { x: world.size.width / 2, y: world.size.height / 2 }
+    const initialPos = {
+      x: world.size.width / 2 + radius,
+      y: world.size.height / 2 + radius,
+    }
     const parentBird = new Parent(initialPos, radius, world)
     this.parentBird = parentBird
 
-    const predators = []
-    for (let i = 0; i < 4; i++) {
-      const predator = new Predator(
-        { x: initialPos.x + 10, y: initialPos.y + 10 },
-        radius,
-        world
-      )
-      predator.getRandomDir()
+    const predators = [],
+      children = []
+
+    for (let i = 0; i < 1; i++) {
+      const predator = new Predator(initialPos, radius, world)
+      predator.setCurrDir(i)
       predators.push(predator)
     }
 
+    for (let i = 0; i < 4; i++) {
+      const child = new Child(initialPos, radius, world)
+      children.push(child)
+      child.setCurrDir(4 + i)
+    }
+
     this.predators = predators
+    this.children = children
 
     window.requestAnimationFrame(this.draw)
   }

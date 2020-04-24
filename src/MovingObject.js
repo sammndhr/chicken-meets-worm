@@ -9,19 +9,28 @@ export default class MovingObject {
     this.dx = 2
     this.dy = 2
     this.currDir = [0, 0]
+    this.possibleDirections = [
+      // 0 values off slightly so objects doesn't stick to edges.
+      [this.dx, 0.2],
+      [-this.dx, 0.3],
+      [0.15, this.dy],
+      [0.23, -this.dy],
+      [this.dx, this.dy],
+      [-this.dx, this.dy],
+      [this.dx, -this.dy],
+      [-this.dx, -this.dy],
+    ]
   }
 
   setPos = (pos) => {
     this.pos = pos
   }
 
-  setCurrDir = (dir) => {
-    this.currDir = dir
+  setCurrDir = (index) => {
+    this.currDir = this.possibleDirections[index]
   }
 
   getRandomDir = () => {
-    const dx = this.dx * 1.01,
-      dy = this.dy * 1.01
     /* 
     8 possible directions.
     Vertical and horizontal: 
@@ -37,20 +46,8 @@ export default class MovingObject {
     ↙      ↘
     */
 
-    const possibleDirections = [
-      // 0 values off slightly so objects doesn't stick to edges.
-      [dx, 0.2],
-      [-dx, 0.3],
-      [0.15, dy],
-      [0.23, -dy],
-      [dx, dy],
-      [-dx, dy],
-      [dx, -dy],
-      [-dx, -dy],
-    ]
-
-    const direction = possibleDirections[getRandomInt(8)]
-    this.setCurrDir(direction)
+    const index = getRandomInt(8)
+    this.setCurrDir(index)
   }
 
   checkOutOfBounds = (pos) => {
