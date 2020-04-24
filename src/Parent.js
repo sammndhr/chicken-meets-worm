@@ -1,7 +1,7 @@
 import MovingObject from './MovingObject'
 
 export default class Parent extends MovingObject {
-  constructor(pos, radius = 10, world, color = '#7280f6') {
+  constructor(pos, radius = 13, world, color = '#7280f6') {
     super(pos, radius, world, color)
   }
 

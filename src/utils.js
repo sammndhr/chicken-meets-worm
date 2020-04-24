@@ -5,4 +5,9 @@ function getRandomInt(max) {
 function calculateHypotenuse(a, b) {
   return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2))
 }
-export { getRandomInt, calculateHypotenuse }
+
+function inRange(num, min, max) {
+  return num >= min && num <= max
+}
+
+export { getRandomInt, calculateHypotenuse, inRange }

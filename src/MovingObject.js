@@ -1,25 +1,17 @@
-import { getRandomInt } from './utils'
+import { getRandomInt, inRange } from './utils'
+
+const r = 10,
+  c = '#7280f6',
+  v = { dx: 1, dy: 1 }
 
 export default class MovingObject {
-  constructor(pos, radius = 10, world, color = '#7280f6') {
+  constructor(pos, radius = r, world, color = c, vel = v) {
     this.pos = pos
     this.radius = radius
     this.world = world
     this.color = color
-    this.dx = 2
-    this.dy = 2
+    this.vel = vel
     this.currDir = [0, 0]
-    this.possibleDirections = [
-      // 0 values off slightly so objects doesn't stick to edges.
-      [this.dx, 0.2],
-      [-this.dx, 0.3],
-      [0.15, this.dy],
-      [0.23, -this.dy],
-      [this.dx, this.dy],
-      [-this.dx, this.dy],
-      [this.dx, -this.dy],
-      [-this.dx, -this.dy],
-    ]
   }
 
   setPos = (pos) => {
@@ -46,9 +38,21 @@ export default class MovingObject {
     ↙      ↘
     */
 
+    const { dx, dy } = this.vel
     const index = getRandomInt(8)
+    const possibleDirections = [
+      // 0 values off slightly so objects doesn't stick to edges.
+      [dx, 0.2],
+      [-dx, 0.3],
+      [0.15, dy],
+      [0.23, -dy],
+      [dx, dy],
+      [-dx, dy],
+      [dx, -dy],
+      [-dx, -dy],
+    ]
 
-    this.setCurrDir(this.possibleDirections[index])
+    this.setCurrDir(possibleDirections[index])
   }
 
   checkOutOfBounds = (pos) => {
@@ -80,6 +84,21 @@ export default class MovingObject {
     }
   }
 
+  collide(parent) {
+    const pPos = parent.pos,
+      pR = parent.radius,
+      { x, y } = this.pos,
+      rangeX = [pPos.x - pR, pPos.x + pR],
+      rangeY = [pPos.y - pR, pPos.y + pR]
+    if (
+      (inRange(x - this.radius, ...rangeX) ||
+        inRange(x + this.radius, ...rangeX)) &&
+      (inRange(y - this.radius, ...rangeY) ||
+        inRange(y + this.radius, ...rangeY))
+    ) {
+      console.log('colliding')
+    }
+  }
   /** Draw the object on canvas */
   draw = (ctx) => {
     const { x, y } = this.pos
