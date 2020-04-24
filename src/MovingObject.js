@@ -4,15 +4,13 @@ export default class MovingObject {
     this.radius = radius
     this.world = world
     this.color = color
-    this.draw = this.draw.bind(this)
-    this.move = this.move.bind(this)
   }
 
-  setPos(pos) {
+  setPos = (pos) => {
     this.pos = pos
   }
 
-  checkOutOfBounds(pos) {
+  checkOutOfBounds = (pos) => {
     const { top, right, bottom, left } = this.world.bounds,
       { x, y } = pos,
       radius = this.radius
@@ -29,20 +27,16 @@ export default class MovingObject {
   }
 
   /** Draw the object on canvas */
-  draw() {
-    const canvas = this.world.canvas,
-      ctx = canvas.getContext('2d'),
-      { x, y } = this.pos
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
+  draw = (ctx) => {
+    const { x, y } = this.pos
     ctx.beginPath()
     ctx.arc(x, y, this.radius, 0, Math.PI * 2)
     ctx.fillStyle = this.color
     ctx.fill()
     ctx.closePath()
-    window.requestAnimationFrame(this.draw)
   }
 
-  move(pos) {
+  move = (pos) => {
     const { bounds, offsets } = this.world
     let { x, y } = pos
 
@@ -57,9 +51,5 @@ export default class MovingObject {
     y = relativeY > top + r && relativeY < bottom - r ? relativeY : this.pos.y
 
     this.setPos({ x, y })
-  }
-
-  init() {
-    this.draw()
   }
 }
