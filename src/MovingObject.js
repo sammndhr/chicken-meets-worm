@@ -85,7 +85,7 @@ export default class MovingObject {
     }
   }
 
-  checkCollision(obj) {
+  checkCollision = (obj) => {
     // Note: obj.constructor.name won't work with IE and there are some caveats. More info --> https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/name
     const instanceOf = obj.constructor.name,
       pPos = obj.pos,
@@ -110,11 +110,11 @@ export default class MovingObject {
     }
   }
 
-  collideWithParent(obj) {}
+  collideWithParent = (obj) => {}
 
-  collideWithPredator(obj) {}
+  collideWithPredator = (obj) => {}
 
-  collideWithChild(obj) {}
+  collideWithChild = (obj) => {}
 
   /** Draw the object on canvas */
   draw = (ctx) => {

@@ -22,6 +22,14 @@ class Game {
     this.parentBird.move(this.mouse)
   }
 
+  checkCollisions() {
+    for (const child of this.children) {
+      child.checkCollision(this.parentBird)
+      for (const predator of this.predators) {
+        child.checkCollision(predator)
+      }
+    }
+  }
   draw() {
     const canvas = this.world.canvas,
       ctx = canvas.getContext('2d')
@@ -34,9 +42,9 @@ class Game {
     }
     for (const child of this.children) {
       child.draw(ctx)
-      child.checkCollision(this.parentBird)
       child.move()
     }
+    this.checkCollisions()
     window.requestAnimationFrame(this.draw)
   }
 
@@ -66,7 +74,7 @@ class Game {
     const predators = [],
       children = []
 
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < 3; i++) {
       const predator = new Predator(initialPos, radius, world)
       predator.setRandomDir()
       predators.push(predator)

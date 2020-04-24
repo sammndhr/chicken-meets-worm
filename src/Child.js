@@ -22,6 +22,17 @@ export default class Child extends MovingObject {
     this.setIndependence(false)
   }
 
+  collideWithPredator = () => {
+    if (this.isIndependent) {
+      let { x, y } = this.pos,
+        pos = { x: x + this.currDir[0], y: y + this.currDir[1] }
+
+      this.setRandomDir()
+      pos = { x: x + this.currDir[0], y: y + this.currDir[1] }
+      this.setPos(pos)
+    }
+  }
+
   move() {
     if (this.isIndependent) super.move()
     else {
