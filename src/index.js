@@ -63,14 +63,14 @@ class Game {
 
     for (let i = 0; i < 1; i++) {
       const predator = new Predator(initialPos, radius, world)
-      predator.setCurrDir(i)
+      predator.setRandomDir()
       predators.push(predator)
     }
 
     for (let i = 0; i < 4; i++) {
       const child = new Child(initialPos, radius, world)
+      child.setRandomDir()
       children.push(child)
-      child.setCurrDir(4 + i)
     }
 
     this.predators = predators

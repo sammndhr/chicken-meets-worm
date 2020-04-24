@@ -26,11 +26,11 @@ export default class MovingObject {
     this.pos = pos
   }
 
-  setCurrDir = (index) => {
-    this.currDir = this.possibleDirections[index]
+  setCurrDir = (dir) => {
+    this.currDir = dir
   }
 
-  getRandomDir = () => {
+  setRandomDir = () => {
     /* 
     8 possible directions.
     Vertical and horizontal: 
@@ -47,7 +47,8 @@ export default class MovingObject {
     */
 
     const index = getRandomInt(8)
-    this.setCurrDir(index)
+
+    this.setCurrDir(this.possibleDirections[index])
   }
 
   checkOutOfBounds = (pos) => {
@@ -62,6 +63,22 @@ export default class MovingObject {
 
     return false
   }
+  /** Bounce object back if it hits the wall */
+  bounceBack = (pos) => {
+    const { bounds } = this.world,
+      { top, right, bottom, left } = bounds,
+      r = this.radius
+    let { x, y } = pos,
+      [dx, dy] = this.currDir
+
+    if (x + dx > right - r || x + dx < left + r) {
+      this.setCurrDir([-dx, dy])
+    }
+
+    if (y + dy > bottom - r || y + dy < top + r) {
+      this.setCurrDir([dx, -dy])
+    }
+  }
 
   /** Draw the object on canvas */
   draw = (ctx) => {
@@ -74,22 +91,13 @@ export default class MovingObject {
   }
 
   move = () => {
-    const { bounds } = this.world,
-      { top, right, bottom, left } = bounds,
-      r = this.radius
     let { x, y } = this.pos,
-      pos = { x: x + this.currDir[0], y: y + this.currDir[1] },
-      dy = this.dy,
-      dx = this.dx
+      pos = { x: x + this.currDir[0], y: y + this.currDir[1] }
 
-    if (x + dx > right - r || x + dx < left + r) {
-      this.getRandomDir()
-    }
-    if (y + dy > bottom - r || y + dy < top + r) {
-      this.getRandomDir()
-    }
+    // this.bounceBack(pos)
+    // Make objects bounce in random direction instead of bouncing back.
     while (this.checkOutOfBounds(pos)) {
-      this.getRandomDir()
+      this.setRandomDir()
       pos = { x: x + this.currDir[0], y: y + this.currDir[1] }
     }
 
