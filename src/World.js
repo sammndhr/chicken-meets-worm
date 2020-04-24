@@ -4,10 +4,7 @@ export default class World {
     this.canvas = display.world
     this.size = this.display.worldSize
     this.bounds = { top: null, right: null, bottom: null, right: null }
-  }
-
-  setBounds(bounds) {
-    this.bounds = bounds
+    this.offsets = { top: null, left: null }
   }
 
   getBounds() {
@@ -19,8 +16,24 @@ export default class World {
     return { top, right, bottom, left }
   }
 
+  setBounds(bounds) {
+    this.bounds = bounds
+  }
+
+  getOffsets() {
+    const top = this.canvas.offsetTop,
+      left = this.canvas.offsetLeft
+    return { top, left }
+  }
+  setOffsets(offsets) {
+    this.offsets = offsets
+  }
+
   init() {
-    const bounds = this.getBounds()
+    const bounds = this.getBounds(),
+      offsets = this.getOffsets()
+
     this.setBounds(bounds)
+    this.setOffsets(offsets)
   }
 }

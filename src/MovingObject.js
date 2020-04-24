@@ -1,10 +1,11 @@
 export default class MovingObject {
-  constructor(pos, radius = 10, world, color = '#f67280') {
+  constructor(pos, radius = 10, world, color = '#7280f6') {
     this.pos = pos
     this.radius = radius
     this.world = world
     this.color = color
     this.draw = this.draw.bind(this)
+    this.move = this.move.bind(this)
   }
 
   setPos(pos) {
@@ -27,32 +28,38 @@ export default class MovingObject {
     return false
   }
 
-  clampAndSetPos(pos) {
-    const { top, right, bottom, left } = this.world.bounds,
-      radius = this.radius
-    let { x, y } = pos
-
-    if (x - radius < left) x = x + radius
-    if (x + radius > right) x = x - radius
-    if (y - radius < top) y = y + radius
-    if (y + radius > bottom) y = y - radius
-    this.setPos({ x, y })
-    return { x, y }
-  }
-
-  drawBall({ x, y }) {
+  /** Draw the object on canvas */
+  draw() {
     const canvas = this.world.canvas,
-      ctx = canvas.getContext('2d')
-
+      ctx = canvas.getContext('2d'),
+      { x, y } = this.pos
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
     ctx.beginPath()
     ctx.arc(x, y, this.radius, 0, Math.PI * 2)
     ctx.fillStyle = this.color
     ctx.fill()
     ctx.closePath()
+    window.requestAnimationFrame(this.draw)
   }
 
-  draw() {
-    this.clampAndSetPos(this.pos)
-    this.drawBall(this.pos)
+  move(pos) {
+    const { bounds, offsets } = this.world
+    let { x, y } = pos
+
+    const { top, right, bottom, left } = bounds,
+      r = this.radius,
+      offsetL = offsets.left,
+      offsetT = offsets.top,
+      relativeX = x - offsetL,
+      relativeY = y - offsetT
+
+    x = relativeX > left + r && relativeX < right - r ? relativeX : this.pos.x
+    y = relativeY > top + r && relativeY < bottom - r ? relativeY : this.pos.y
+
+    this.setPos({ x, y })
+  }
+
+  init() {
+    this.draw()
   }
 }
