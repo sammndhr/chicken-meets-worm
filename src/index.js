@@ -14,30 +14,28 @@ class Game {
     this.predators = []
     this.children = []
     this.world = null
-    this.handleMouseMove = this.handleMouseMove.bind(this)
-    this.draw = this.draw.bind(this)
   }
 
-  handleMouseMove(e) {
+  handleMouseMove = (e) => {
     this.mouse = { x: e.clientX, y: e.clientY }
     this.parentBird.move(this.mouse)
   }
 
-  checkCollisions() {
+  checkCollisions = () => {
     // Child collisions
     for (const child of this.children) {
-      child.checkCollisionWithParent(this.parentBird)
+      this.parentBird.checkInRange(child)
       for (const predator of this.predators) {
-        child.checkCollisionWithPredator(predator)
+        child.checkInRange(predator, 5)
       }
     }
     // Parent collisions
     for (const predator of this.predators) {
-      this.parentBird.checkCollisionWithPredator(predator)
+      this.parentBird.checkInRange(predator)
     }
   }
 
-  draw() {
+  draw = () => {
     const canvas = this.world.canvas,
       ctx = canvas.getContext('2d')
 
@@ -55,7 +53,7 @@ class Game {
     window.requestAnimationFrame(this.draw)
   }
 
-  init() {
+  init = () => {
     this.display.renderGame()
     this.display.renderLives()
     this.display.renderWorld()

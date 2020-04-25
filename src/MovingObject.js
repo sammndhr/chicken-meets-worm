@@ -13,6 +13,11 @@ export default class MovingObject {
     this.vel = vel
     this.currDir = [0, 0]
     this.move = this.move.bind(this)
+
+    this.checkInRange = this.checkInRange.bind(this)
+    this.hitParent = this.hitParent.bind(this)
+    this.hitPredator = this.hitPredator.bind(this)
+    this.hitChild = this.hitChild.bind(this)
   }
 
   setPos = (pos) => {
@@ -85,21 +90,41 @@ export default class MovingObject {
     }
   }
 
-  checkCollision = (obj, cushion = 0) => {
+  checkInRange(obj, cushion = 0) {
     // Note: obj.constructor.name won't work with IE and there are some caveats. More info --> https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/name
-    const oPos = obj.pos,
+
+    const instanceOf = obj.constructor.name,
+      oPos = obj.pos,
       oR = obj.radius + cushion,
       { x, y } = this.pos,
       rangeX = [oPos.x - oR, oPos.x + oR],
       rangeY = [oPos.y - oR, oPos.y + oR],
       r = this.radius + cushion
-
-    const collided =
+    const withinRange =
       (inRange(x - r, ...rangeX) || inRange(x + r, ...rangeX)) &&
       (inRange(y - r, ...rangeY) || inRange(y + r, ...rangeY))
 
-    return collided
+    if (!withinRange) return
+
+    if (instanceOf === 'Predator' && this.constructor.name === 'Parent') {
+      return withinRange
+    }
+
+    if (instanceOf === 'Predator' && this.constructor.name !== 'Parent') {
+      this.hitPredator(obj)
+    } else if (instanceOf === 'Parent') {
+      this.hitParent(obj)
+    } else if (instanceOf === 'Child') {
+      this.hitChild(obj)
+    }
   }
+
+  // Can't use @babel/plugin-proposal-class-properties. super.move() doesn't work in subclasses.
+  hitParent(obj) {}
+
+  hitPredator(obj) {}
+
+  hitChild(obj) {}
 
   /** Draw the object on canvas */
   draw = (ctx) => {
@@ -110,7 +135,7 @@ export default class MovingObject {
     ctx.fill()
     ctx.closePath()
   }
-  // Can't use @babel/plugin-proposal-class-properties. super.move() doesn't work in subclasses.
+
   move() {
     let { x, y } = this.pos,
       pos = { x: x + this.currDir[0], y: y + this.currDir[1] }

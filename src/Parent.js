@@ -7,6 +7,9 @@ export default class Parent extends MovingObject {
     this.childCount = 0
     this.lives = lives
     this.currPredCols = []
+    this.checkInRange = this.checkInRange.bind(this)
+    this.hitPredator = this.hitPredator.bind(this)
+    this.hitChild = this.hitChild.bind(this)
   }
 
   setChildCount = (count) => {
@@ -35,8 +38,14 @@ export default class Parent extends MovingObject {
     }
   }
 
+  checkInRange(obj, cushion = 0) {
+    if (obj.constructor.name === 'Predator')
+      this.checkCollisionWithPredator(obj)
+    else super.checkInRange(obj, cushion)
+  }
+
   checkCollisionWithPredator = (predator) => {
-    const collided = this.checkCollision(predator),
+    const collided = super.checkInRange(predator),
       colliding = this.currPredCols.includes(predator)
     /* if collided and first contact,
       add predator to the current collisions with predator,
@@ -47,11 +56,11 @@ export default class Parent extends MovingObject {
       currPredCols.push(predator)
       this.setCurrPredCols(currPredCols)
 
-      this.collideWithPredator()
+      this.hitPredator()
     }
 
     /* if was colliding and stopped colliding, remove predator from current collisions */
-    if (!collided && this.checkCollision(predator, 5) && colliding) {
+    if (!collided && super.checkInRange(predator, 5) && colliding) {
       const currPredCols = this.currPredCols.slice(),
         index = currPredCols.indexOf(predator)
       currPredCols.splice(index, 1)
@@ -59,8 +68,13 @@ export default class Parent extends MovingObject {
     }
   }
 
-  collideWithPredator = () => {
+  hitPredator() {
     this.lives.decrementCount()
+  }
+
+  hitChild(obj) {
+    this.appendChild(obj)
+    obj.setIndependence(false)
   }
 
   move = (pos) => {

@@ -11,26 +11,15 @@ export default class Child extends MovingObject {
     this.chainPos = null
     this.parent = null
     this.move = this.move.bind(this)
+
+    this.hitPredator = this.hitPredator.bind(this)
   }
 
   setIndependence = (independence) => {
     this.isIndependent = independence
   }
 
-  checkCollisionWithParent = (parent) => {
-    if (this.checkCollision(parent)) this.collideWithParent(parent)
-  }
-
-  checkCollisionWithPredator = (predator) => {
-    if (this.checkCollision(predator)) this.collideWithPredator(predator)
-  }
-
-  collideWithParent = (obj) => {
-    obj.appendChild(this)
-    this.setIndependence(false)
-  }
-
-  collideWithPredator = () => {
+  hitPredator() {
     if (this.isIndependent) {
       let { x, y } = this.pos,
         pos = { x: x + this.currDir[0], y: y + this.currDir[1] }
