@@ -85,36 +85,21 @@ export default class MovingObject {
     }
   }
 
-  checkCollision = (obj) => {
+  checkCollision = (obj, cushion = 0) => {
     // Note: obj.constructor.name won't work with IE and there are some caveats. More info --> https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/name
-    const instanceOf = obj.constructor.name,
-      pPos = obj.pos,
-      pR = obj.radius,
+    const oPos = obj.pos,
+      oR = obj.radius + cushion,
       { x, y } = this.pos,
-      rangeX = [pPos.x - pR, pPos.x + pR],
-      rangeY = [pPos.y - pR, pPos.y + pR],
-      collided =
-        (inRange(x - this.radius, ...rangeX) ||
-          inRange(x + this.radius, ...rangeX)) &&
-        (inRange(y - this.radius, ...rangeY) ||
-          inRange(y + this.radius, ...rangeY))
+      rangeX = [oPos.x - oR, oPos.x + oR],
+      rangeY = [oPos.y - oR, oPos.y + oR],
+      r = this.radius + cushion
 
-    if (!collided) return
+    const collided =
+      (inRange(x - r, ...rangeX) || inRange(x + r, ...rangeX)) &&
+      (inRange(y - r, ...rangeY) || inRange(y + r, ...rangeY))
 
-    if (instanceOf === 'Parent') {
-      this.collideWithParent(obj)
-    } else if (instanceOf === 'Predator') {
-      this.collideWithPredator(obj)
-    } else if (instanceOf === 'Child') {
-      this.collideWithChild(obj)
-    }
+    return collided
   }
-
-  collideWithParent = (obj) => {}
-
-  collideWithPredator = (obj) => {}
-
-  collideWithChild = (obj) => {}
 
   /** Draw the object on canvas */
   draw = (ctx) => {

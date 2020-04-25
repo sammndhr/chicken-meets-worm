@@ -24,14 +24,16 @@ class Game {
   }
 
   checkCollisions() {
+    // Child collisions
     for (const child of this.children) {
-      child.checkCollision(this.parentBird)
+      child.checkCollisionWithParent(this.parentBird)
       for (const predator of this.predators) {
-        child.checkCollision(predator)
+        child.checkCollisionWithPredator(predator)
       }
     }
+    // Parent collisions
     for (const predator of this.predators) {
-      this.parentBird.checkCollision(predator)
+      this.parentBird.checkCollisionWithPredator(predator)
     }
   }
 

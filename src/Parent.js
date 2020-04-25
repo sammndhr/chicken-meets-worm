@@ -6,14 +6,15 @@ export default class Parent extends MovingObject {
     this.children = []
     this.childCount = 0
     this.lives = lives
-  }
-
-  setCurrCollision = (collision) => {
-    this.currCollision = collision
+    this.currPredCols = []
   }
 
   setChildCount = (count) => {
     this.childCount = count
+  }
+
+  setCurrPredCols = (currPredCols) => {
+    this.currPredCols = currPredCols
   }
 
   incrementChildCount = () => {
@@ -34,7 +35,31 @@ export default class Parent extends MovingObject {
     }
   }
 
-  collideWithPredator = (obj) => {
+  checkCollisionWithPredator = (predator) => {
+    const collided = this.checkCollision(predator),
+      colliding = this.currPredCols.includes(predator)
+    /* if collided and first contact,
+      add predator to the current collisions with predator,
+      call collide with predator (decrement lives)
+    */
+    if (collided && !colliding) {
+      const currPredCols = this.currPredCols.slice()
+      currPredCols.push(predator)
+      this.setCurrPredCols(currPredCols)
+
+      this.collideWithPredator()
+    }
+
+    /* if was colliding and stopped colliding, remove predator from current collisions */
+    if (!collided && this.checkCollision(predator, 5) && colliding) {
+      const currPredCols = this.currPredCols.slice(),
+        index = currPredCols.indexOf(predator)
+      currPredCols.splice(index, 1)
+      this.setCurrPredCols(currPredCols)
+    }
+  }
+
+  collideWithPredator = () => {
     this.lives.decrementCount()
   }
 

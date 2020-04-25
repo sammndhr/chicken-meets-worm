@@ -17,6 +17,14 @@ export default class Child extends MovingObject {
     this.isIndependent = independence
   }
 
+  checkCollisionWithParent = (parent) => {
+    if (this.checkCollision(parent)) this.collideWithParent(parent)
+  }
+
+  checkCollisionWithPredator = (predator) => {
+    if (this.checkCollision(predator)) this.collideWithPredator(predator)
+  }
+
   collideWithParent = (obj) => {
     obj.appendChild(this)
     this.setIndependence(false)
