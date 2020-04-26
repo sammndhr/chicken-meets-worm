@@ -34,7 +34,7 @@ export default class Child extends MovingObject {
     if (this.isIndependent) super.move()
     else {
       const { x, y } = this.parent.pos,
-        offset = (this.parent.radius + this.radius + 5) * (this.chainPos + 1)
+        offset = (this.parent.radius + this.radius + 5) * this.chainPos
       this.setPos({ x: x, y: y + offset })
     }
   }

@@ -1,41 +1,35 @@
+import { LinkedList, Queue } from 'data_structures'
 import MovingObject from './MovingObject'
 
 export default class Parent extends MovingObject {
   constructor(pos, radius = 13, world, lives, color = '#7280f6') {
     super(pos, radius, world, color)
-    this.children = []
-    this.childCount = 0
+    this.children = new LinkedList()
+    // this.childCount = 0
     this.lives = lives
     this.currPredCols = []
     this.checkInRange = this.checkInRange.bind(this)
     this.hitPredator = this.hitPredator.bind(this)
     this.hitChild = this.hitChild.bind(this)
-  }
-
-  setChildCount = (count) => {
-    this.childCount = count
+    this.posCache = new Queue()
   }
 
   setCurrPredCols = (currPredCols) => {
     this.currPredCols = currPredCols
   }
 
-  incrementChildCount = () => {
-    let count = this.childCount
-    count++
-    this.setChildCount(count)
+  getChildCount = () => {
+    return this.children.size
   }
 
   appendChild = (child) => {
-    // shallow copy
-    const children = this.children.slice()
-    if (!children.includes(child)) {
-      children.push(child)
-      this.children = children
-      child.chainPos = this.childCount
+    if (!this.children.search(child)) {
+      this.children.appendToTail(child)
+      child.chainPos = this.getChildCount()
       child.parent = this
-      this.incrementChildCount()
     }
+    // this.children.printList()
+    // console.log(this.getChildCount())
   }
 
   checkInRange(obj, cushion = 0) {
@@ -78,6 +72,7 @@ export default class Parent extends MovingObject {
   }
 
   move = (pos) => {
+    const prevPos = this.pos
     const { bounds, offsets } = this.world
     let { x, y } = pos
 
