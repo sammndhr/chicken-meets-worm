@@ -1,17 +1,15 @@
-import { LinkedList, Queue } from 'data_structures'
+import { LinkedList } from 'data_structures'
 import MovingObject from './MovingObject'
 
 export default class Parent extends MovingObject {
   constructor(pos, radius = 13, world, lives, color = '#7280f6') {
     super(pos, radius, world, color)
     this.children = new LinkedList()
-    // this.childCount = 0
     this.lives = lives
     this.currPredCols = []
     this.checkInRange = this.checkInRange.bind(this)
     this.hitPredator = this.hitPredator.bind(this)
     this.hitChild = this.hitChild.bind(this)
-    this.posCache = new Queue()
   }
 
   setCurrPredCols = (currPredCols) => {
@@ -25,6 +23,7 @@ export default class Parent extends MovingObject {
   appendChild = (child) => {
     if (!this.children.search(child)) {
       this.children.appendToTail(child)
+
       child.chainPos = this.getChildCount()
       child.parent = this
     }
@@ -72,7 +71,6 @@ export default class Parent extends MovingObject {
   }
 
   move = (pos) => {
-    const prevPos = this.pos
     const { bounds, offsets } = this.world
     let { x, y } = pos
 
