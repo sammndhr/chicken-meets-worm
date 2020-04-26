@@ -3,7 +3,7 @@ import Game from './Game'
 
 const game = new Game(
   new Display({
-    width: window.innerWidth / 2,
+    width: window.innerWidth / 1.2,
     height: window.innerHeight / 1.2,
   })
 )

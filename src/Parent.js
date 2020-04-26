@@ -8,6 +8,8 @@ export default class Parent extends MovingObject {
     this.lives = lives
     this.easing = easing
     this.currPredCols = []
+    this.posCache = []
+
     this.move = this.move.bind(this)
     this.checkInRange = this.checkInRange.bind(this)
     this.hitPredator = this.hitPredator.bind(this)
@@ -24,9 +26,13 @@ export default class Parent extends MovingObject {
 
   appendChild = (child) => {
     if (!this.children.search(child)) {
+      const tail = this.children.tail,
+        lastChild = tail && tail.val
+      if (lastChild) lastChild.setNextChild(child)
+
       this.children.appendToTail(child)
 
-      child.chainPos = this.getChildCount()
+      child.setChainPos(this.getChildCount())
       child.parent = this
     }
   }
@@ -72,5 +78,9 @@ export default class Parent extends MovingObject {
 
   move(pos) {
     super.moveWithCursor(pos, this.easing)
+    const firstChild = this.children.head && this.children.head.val
+
+    if (firstChild)
+      firstChild.move(this.posCache.length ? this.posCache[0] : pos)
   }
 }

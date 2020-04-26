@@ -9,7 +9,6 @@ export default class Game {
   constructor(display) {
     this.display = display
     this.mouse = { x: null, y: null }
-
     this.parentBird = null
     this.predators = []
     this.children = []
@@ -18,7 +17,6 @@ export default class Game {
 
   handleMouseMove = (e) => {
     this.mouse = { x: e.clientX, y: e.clientY }
-    this.parentBird.move(this.mouse)
   }
 
   checkCollisions = () => {
@@ -40,15 +38,20 @@ export default class Game {
       ctx = canvas.getContext('2d')
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+    this.parentBird.move(this.mouse)
     this.parentBird.draw(ctx)
+
     for (const predator of this.predators) {
       predator.move()
       predator.draw(ctx)
     }
+
     for (const child of this.children) {
-      child.move(this.mouse)
+      if (child.isIndependent) child.move()
       child.draw(ctx)
     }
+
     this.checkCollisions()
     window.requestAnimationFrame(this.draw)
   }

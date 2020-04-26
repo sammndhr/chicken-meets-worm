@@ -12,6 +12,8 @@ export default class MovingObject {
     this.color = color
     this.vel = vel
     this.currDir = [0, 0]
+    this.posCache = []
+
     this.moveWithCursor = this.moveWithCursor.bind(this)
     this.move = this.move.bind(this)
     this.checkInRange = this.checkInRange.bind(this)
@@ -22,6 +24,10 @@ export default class MovingObject {
 
   setPos = (pos) => {
     this.pos = pos
+  }
+
+  setPosCache = (posCache) => {
+    this.posCache = posCache
   }
 
   setCurrDir = (dir) => {
@@ -100,6 +106,7 @@ export default class MovingObject {
       rangeX = [oPos.x - oR, oPos.x + oR],
       rangeY = [oPos.y - oR, oPos.y + oR],
       r = this.radius + cushion
+
     const withinRange =
       (inRange(x - r, ...rangeX) || inRange(x + r, ...rangeX)) &&
       (inRange(y - r, ...rangeY) || inRange(y + r, ...rangeY))
@@ -136,13 +143,22 @@ export default class MovingObject {
     ctx.closePath()
   }
 
-  moveWithCursor(pos, easing, offset) {
-    const { bounds, offsets } = this.world
+  clipPos = ({ x, y }) => {
+    const { top, right, bottom, left } = this.world.bounds,
+      r = this.radius
+
+    const clippedX = x > left + r && x < right - r ? x : this.pos.x,
+      clippedY = y > top + r && y < bottom - r ? y : this.pos.y
+
+    return { x: clippedX, y: clippedY }
+  }
+
+  moveWithCursor(pos, easing, offset = 0) {
+    const { offsets } = this.world
     let { x, y } = pos
 
-    const { top, right, bottom, left } = bounds,
-      r = this.radius,
-      offsetL = offsets.left,
+    // Offsets to account for margin, paddings around game world.
+    const offsetL = offsets.left,
       offsetT = offsets.top,
       relativeX = x - offsetL,
       relativeY = y - offsetT
@@ -150,6 +166,10 @@ export default class MovingObject {
     let xDiff = relativeX - this.pos.x,
       yDiff = relativeY - this.pos.y
 
+    // Offset children so they don't all overlap the parent when stationary or slow moving.
+    if (yDiff < 0) yDiff += offset
+
+    //More info on tweening, animation --> https://spicyyoghurt.com/tutorials/html5-javascript-game-development/create-a-smooth-canvas-animation https://stackoverflow.com/a/37973577/11279811
     const velX = xDiff * easing,
       velY = yDiff * easing
 
@@ -158,11 +178,18 @@ export default class MovingObject {
     x = this.pos.x + velX
     y = this.pos.y + velY
 
-    x = x > left + r && x < right - r ? x : this.pos.x
-    y = y > top + r && y < bottom - r ? y : this.pos.y
+    //Don't let objects pass edge
+    const clippedPos = this.clipPos({ x, y })
 
-    this.setPos({ x, y })
+    this.setPos(clippedPos)
+
+    // Cache last 5 positions. Makes children's movement more natural.
+    const posCache = this.posCache
+    if (posCache.length > 4) posCache.shift()
+    posCache.push(pos)
+    this.setPosCache(posCache)
   }
+
   move() {
     let { x, y } = this.pos,
       pos = { x: x + this.currDir[0], y: y + this.currDir[1] }
