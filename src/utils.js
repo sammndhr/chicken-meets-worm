@@ -10,4 +10,7 @@ function inRange(num, min, max) {
   return num >= min && num <= max
 }
 
-export { getRandomInt, calculateHypotenuse, inRange }
+function easeLinear(t, b, c, d) {
+  return (c * t) / d + b
+}
+export { getRandomInt, calculateHypotenuse, inRange, easeLinear }

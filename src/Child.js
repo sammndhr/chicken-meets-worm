@@ -11,7 +11,6 @@ export default class Child extends MovingObject {
     this.chainPos = null
     this.parent = null
     this.move = this.move.bind(this)
-
     this.hitPredator = this.hitPredator.bind(this)
   }
 
@@ -30,14 +29,11 @@ export default class Child extends MovingObject {
     }
   }
 
-  moveWithParent = () => {
-    const { x, y } = this.parent.pos,
-      offset = (this.parent.radius + this.radius + 5) * this.chainPos
-    this.setPos({ x: x, y: y + offset })
-  }
-
-  move() {
+  move(pos) {
     if (this.isIndependent) super.move()
-    else this.moveWithParent()
+    else {
+      const easing = Math.max(1 - this.chainPos * 0.13, 0.1)
+      super.moveWithCursor(pos, easing)
+    }
   }
 }

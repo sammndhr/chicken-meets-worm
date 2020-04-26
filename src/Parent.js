@@ -2,11 +2,13 @@ import { LinkedList } from 'data_structures'
 import MovingObject from './MovingObject'
 
 export default class Parent extends MovingObject {
-  constructor(pos, radius = 13, world, lives, color = '#7280f6') {
+  constructor(pos, radius = 13, world, lives, color = '#7280f6', easing = 0.9) {
     super(pos, radius, world, color)
     this.children = new LinkedList()
     this.lives = lives
+    this.easing = easing
     this.currPredCols = []
+    this.move = this.move.bind(this)
     this.checkInRange = this.checkInRange.bind(this)
     this.hitPredator = this.hitPredator.bind(this)
     this.hitChild = this.hitChild.bind(this)
@@ -27,8 +29,6 @@ export default class Parent extends MovingObject {
       child.chainPos = this.getChildCount()
       child.parent = this
     }
-    // this.children.printList()
-    // console.log(this.getChildCount())
   }
 
   checkInRange(obj, cushion = 0) {
@@ -70,20 +70,7 @@ export default class Parent extends MovingObject {
     obj.setIndependence(false)
   }
 
-  move = (pos) => {
-    const { bounds, offsets } = this.world
-    let { x, y } = pos
-
-    const { top, right, bottom, left } = bounds,
-      r = this.radius,
-      offsetL = offsets.left,
-      offsetT = offsets.top,
-      relativeX = x - offsetL,
-      relativeY = y - offsetT
-
-    x = relativeX > left + r && relativeX < right - r ? relativeX : this.pos.x
-    y = relativeY > top + r && relativeY < bottom - r ? relativeY : this.pos.y
-
-    this.setPos({ x, y })
+  move(pos) {
+    super.moveWithCursor(pos, this.easing)
   }
 }

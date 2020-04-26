@@ -9,11 +9,11 @@ export default class Game {
   constructor(display) {
     this.display = display
     this.mouse = { x: null, y: null }
+
     this.parentBird = null
     this.predators = []
     this.children = []
     this.world = null
-    this.timePassed = 0
   }
 
   handleMouseMove = (e) => {
@@ -46,7 +46,7 @@ export default class Game {
       predator.draw(ctx)
     }
     for (const child of this.children) {
-      child.move()
+      child.move(this.mouse)
       child.draw(ctx)
     }
     this.checkCollisions()
@@ -89,7 +89,7 @@ export default class Game {
       predators.push(predator)
     }
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 9; i++) {
       const child = new Child(initialPos, radius, world)
       child.setRandomDir()
       children.push(child)

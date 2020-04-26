@@ -12,8 +12,8 @@ export default class MovingObject {
     this.color = color
     this.vel = vel
     this.currDir = [0, 0]
+    this.moveWithCursor = this.moveWithCursor.bind(this)
     this.move = this.move.bind(this)
-
     this.checkInRange = this.checkInRange.bind(this)
     this.hitParent = this.hitParent.bind(this)
     this.hitPredator = this.hitPredator.bind(this)
@@ -136,6 +136,33 @@ export default class MovingObject {
     ctx.closePath()
   }
 
+  moveWithCursor(pos, easing, offset) {
+    const { bounds, offsets } = this.world
+    let { x, y } = pos
+
+    const { top, right, bottom, left } = bounds,
+      r = this.radius,
+      offsetL = offsets.left,
+      offsetT = offsets.top,
+      relativeX = x - offsetL,
+      relativeY = y - offsetT
+
+    let xDiff = relativeX - this.pos.x,
+      yDiff = relativeY - this.pos.y
+
+    const velX = xDiff * easing,
+      velY = yDiff * easing
+
+    this.velocity = { x: velX, y: velY }
+
+    x = this.pos.x + velX
+    y = this.pos.y + velY
+
+    x = x > left + r && x < right - r ? x : this.pos.x
+    y = y > top + r && y < bottom - r ? y : this.pos.y
+
+    this.setPos({ x, y })
+  }
   move() {
     let { x, y } = this.pos,
       pos = { x: x + this.currDir[0], y: y + this.currDir[1] }
