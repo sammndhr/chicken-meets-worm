@@ -180,12 +180,8 @@ export default class MovingObject {
     let { x, y } = this.pos,
       pos = { x: x + this.currDir[0], y: y + this.currDir[1] }
 
-    // this.bounceBack(pos)
+    this.bounceBack(pos)
     // Make objects bounce in random direction instead of bouncing back.
-    while (this.checkOutOfBounds(pos)) {
-      this.setRandomDir()
-      pos = { x: x + this.currDir[0], y: y + this.currDir[1] }
-    }
 
     this.setPos(pos)
   }

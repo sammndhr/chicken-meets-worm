@@ -7,13 +7,12 @@ const r = 10,
 export default class Child extends MovingObject {
   constructor(pos, radius = r, world, color = c, vel = v) {
     super(pos, radius, world, color, vel)
-    this.isIndependent = true
+    this.independence = true
     this.chainPos = null
     this.parent = null
     this.nextChild = null
     this.posCache = []
     this.moves = this.moves.bind(this)
-    this.hitsPredator = this.hitsPredator.bind(this)
   }
 
   setChainPos = (chainPos) => {
@@ -26,22 +25,27 @@ export default class Child extends MovingObject {
   }
 
   setIndependence = (independence) => {
-    this.isIndependent = independence
+    this.independence = independence
   }
 
-  hitsPredator() {
-    if (this.isIndependent) {
+  isIndependent = () => {
+    return this.independence
+  }
+
+  avoidPredator = () => {
+    if (this.independence) {
       let { x, y } = this.pos,
         pos = { x: x + this.currDir[0], y: y + this.currDir[1] }
 
       this.setRandomDir()
       pos = { x: x + this.currDir[0], y: y + this.currDir[1] }
-      this.setPos(pos)
+
+      this.bounceBack(pos)
     }
   }
 
   moves(pos) {
-    if (this.isIndependent) super.moves()
+    if (this.isIndependent()) super.moves()
     else {
       const easing = Math.max(1 - this.chainPos * 0.13, 0.1),
         r = this.radius,

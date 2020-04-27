@@ -1,3 +1,4 @@
+import { LinkedList } from 'data_structures'
 import Child from './Child.js'
 import Lives from './Lives.js'
 import Parent from './Parent.js'
@@ -13,7 +14,7 @@ export default class Game {
     this.world = null
     this.parentBird = null
     this.predators = []
-    this.children = []
+    this.children = new LinkedList()
     this.lives = 0
     this.score = 0
   }
@@ -22,14 +23,28 @@ export default class Game {
     this.mouse = { x: e.clientX, y: e.clientY }
   }
 
+  destroyChild = (child) => {
+    this.children.deleteNode(child)
+  }
+
+  childHitsPredator = (child) => {
+    this.destroyChild(child)
+  }
+
+  checkWallCollisions = () => {}
+
   checkInRange = () => {
-    const parent = this.parentBird
+    const parent = this.parentBird,
+      children = this.children.toArray()
     // Child collisions
-    for (const child of this.children) {
+
+    for (const child of children) {
       if (parent.checkInRange(child)) parent.hitsChild(child)
       for (const predator of this.predators) {
-        if (child.checkInRange(predator, 10)) child.hitsPredator()
-        if (child.checkInRange(predator, 0)) console.log('dead')
+        if (child.checkInRange(predator, 10)) child.avoidPredator()
+        if (child.isIndependent() && child.checkInRange(predator, 0)) {
+          this.childHitsPredator(child)
+        }
       }
     }
     // Parent collisions
@@ -41,7 +56,8 @@ export default class Game {
 
   draw = () => {
     const canvas = this.world.canvas,
-      ctx = canvas.getContext('2d')
+      ctx = canvas.getContext('2d'),
+      children = this.children.toArray()
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -53,8 +69,8 @@ export default class Game {
       predator.draw(ctx)
     }
 
-    for (const child of this.children) {
-      if (child.isIndependent) child.moves()
+    for (const child of children) {
+      if (child.independence) child.moves()
       child.draw(ctx)
     }
 
@@ -63,8 +79,6 @@ export default class Game {
   }
 
   initChildren = (count, radius) => {
-    const children = []
-
     for (let i = 0; i < count; i++) {
       const x = this.world.size.width / 2,
         y = this.world.size.height
@@ -78,9 +92,8 @@ export default class Game {
       )
 
       child.setRandomDir()
-      children.push(child)
+      this.children.appendToTail(child)
     }
-    this.children = children
   }
 
   initPredators = (count, radius) => {
@@ -144,8 +157,8 @@ export default class Game {
     this.initScore()
     this.initLives(0)
     this.initParent(13)
-    this.initChildren(8, 10)
-    this.initPredators(8, 10)
+    this.initChildren(10, 10)
+    this.initPredators(10, 10)
     window.requestAnimationFrame(this.draw)
   }
 }
