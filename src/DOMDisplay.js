@@ -8,10 +8,12 @@ export default class DOMDisplay {
     this.worldSize = { width, height }
   }
 
-  createElement = (tag, className, id) => {
+  createElement = (tag, className, id, content) => {
     const element = document.createElement(tag)
+    if (className === 'score-label') console.log(element)
     if (className) element.classList.add(className)
     if (id) element.id = id
+    if (content) element.innerText = content
     return element
   }
 
@@ -38,7 +40,22 @@ export default class DOMDisplay {
   }
 
   renderLives = () => {
-    const lives = this.createElement('div', 'lives', 'lives')
-    this.game.append(lives)
+    const livesWrapper = this.createElement('div', 'lives-wrapper')
+    const livesLabel = this.createElement('span', 'label', null, 'Lives: ')
+    const lives = this.createElement('span', 'lives', 'lives')
+
+    this.game.append(livesWrapper)
+    livesWrapper.append(livesLabel)
+    livesWrapper.append(lives)
+  }
+
+  renderScore = () => {
+    const scoreWrapper = this.createElement('div', 'score-wrapper')
+    const scoreLabel = this.createElement('span', 'label', null, 'Score: ')
+    const score = this.createElement('span', 'score', 'score')
+
+    this.game.append(scoreWrapper)
+    scoreWrapper.append(scoreLabel)
+    scoreWrapper.append(score)
   }
 }

@@ -2,6 +2,7 @@ import Child from './Child.js'
 import Lives from './Lives.js'
 import Parent from './Parent.js'
 import Predator from './Predator.js'
+import Score from './Score.js'
 import './style.css'
 import World from './World.js'
 
@@ -10,10 +11,11 @@ export default class Game {
     this.display = display
     this.mouse = { x: null, y: null }
     this.world = null
-    this.lives = 0
     this.parentBird = null
     this.predators = []
     this.children = []
+    this.lives = 0
+    this.score = 0
   }
 
   handleMouseMove = (e) => {
@@ -99,7 +101,13 @@ export default class Game {
       y: this.world.size.height / 2 + radius,
     }
 
-    const parentBird = new Parent(initialPos, radius, this.world, this.lives)
+    const parentBird = new Parent(
+      initialPos,
+      radius,
+      this.world,
+      this.lives,
+      this.score
+    )
     this.parentBird = parentBird
   }
 
@@ -115,14 +123,22 @@ export default class Game {
     this.world = world
   }
 
+  initScore = () => {
+    const score = new Score(this.display)
+    score.init()
+    this.score = score
+  }
+
   init = () => {
     this.display.renderGame()
+    this.display.renderScore()
     this.display.renderLives()
     this.display.renderWorld()
 
     window.addEventListener('mousemove', this.handleMouseMove, false)
 
     this.initWorld()
+    this.initScore()
     this.initLives(10)
     this.initParent(13)
     this.initChildren(8, 10)

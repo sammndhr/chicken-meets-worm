@@ -1,11 +1,16 @@
 import { LinkedList } from 'data_structures'
 import MovingObject from './MovingObject'
 
+const r = 13,
+  c = '#7280f6',
+  e = 0.9
+
 export default class Parent extends MovingObject {
-  constructor(pos, radius = 13, world, lives, color = '#7280f6', easing = 0.9) {
+  constructor(pos, radius = r, world, lives, score, color = c, easing = e) {
     super(pos, radius, world, color)
     this.children = new LinkedList()
     this.lives = lives
+    this.score = score
     this.easing = easing
     this.currPredCols = []
     this.posCache = []
@@ -26,6 +31,7 @@ export default class Parent extends MovingObject {
 
   appendChild = (child) => {
     if (!this.children.search(child)) {
+      this.score.calculateScore(this.getChildCount())
       const tail = this.children.tail,
         lastChild = tail && tail.val
       if (lastChild) lastChild.setNextChild(child)
