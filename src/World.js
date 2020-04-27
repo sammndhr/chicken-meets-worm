@@ -1,3 +1,5 @@
+import { getRandomBetween } from './utils'
+
 export default class World {
   constructor(display) {
     this.display = display
@@ -7,17 +9,33 @@ export default class World {
     this.offsets = { top: null, left: null }
   }
 
+  setBounds(bounds) {
+    this.bounds = bounds
+  }
+
+  setOffsets(offsets) {
+    this.offsets = offsets
+  }
+
   getBounds() {
     const top = 0,
       left = 0,
-      bottom = this.canvas.height,
-      right = this.canvas.width
+      bottom = top + this.canvas.height,
+      right = left + this.canvas.width
 
     return { top, right, bottom, left }
   }
 
-  setBounds(bounds) {
-    this.bounds = bounds
+  checkOutOfBounds = (pos, r) => {
+    const { top, right, bottom, left } = this.bounds,
+      { x, y } = pos
+
+    if (x - r < left) return true
+    if (x + r > right) return true
+    if (y - r < top) return true
+    if (y + r > bottom) return true
+
+    return false
   }
 
   getOffsets() {
@@ -25,15 +43,22 @@ export default class World {
       left = this.canvas.offsetLeft
     return { top, left }
   }
-  setOffsets(offsets) {
-    this.offsets = offsets
+
+  getRandomPos = (radius) => {
+    const { top, right, bottom, left } = this.bounds,
+      r = radius
+
+    const x = getRandomBetween(left + r, right - r),
+      y = getRandomBetween(top + r, bottom - r)
+
+    return { x, y }
   }
 
   init() {
-    const bounds = this.getBounds(),
-      offsets = this.getOffsets()
+    const offsets = this.getOffsets(),
+      bounds = this.getBounds()
 
-    this.setBounds(bounds)
     this.setOffsets(offsets)
+    this.setBounds(bounds)
   }
 }

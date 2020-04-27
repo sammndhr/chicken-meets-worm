@@ -68,32 +68,31 @@ export default class MovingObject {
   }
 
   checkOutOfBounds = (pos) => {
-    const { top, right, bottom, left } = this.world.bounds,
-      { x, y } = pos,
-      r = this.radius
+    return this.world.checkOutOfBounds(pos, this.radius)
+  }
 
-    if (x - r < left) return true
-    if (x + r > right) return true
-    if (y - r < top) return true
-    if (y + r > bottom) return true
-
-    return false
+  getRandomPos = () => {
+    return this.world.getRandomPos(this.radius)
   }
   /** Bounce object back if it hits the wall */
   bounceBack = (pos) => {
     const { bounds } = this.world,
       { top, right, bottom, left } = bounds,
       r = this.radius
+
     let { x, y } = pos,
       [dx, dy] = this.currDir
 
-    if (x + dx > right - r || x + dx < left + r) {
+    if (x + r > right || x - r < left) {
       this.setCurrDir([-dx, dy])
     }
 
-    if (y + dy > bottom - r || y + dy < top + r) {
+    if (y - r < top || y + r > bottom) {
       this.setCurrDir([dx, -dy])
     }
+    //objs get stuck if parallel to walls and out of bounds
+    let nPos = { x: x + this.currDir[0], y: y + this.currDir[1] }
+    if (this.checkOutOfBounds(nPos)) this.setRandomDir()
   }
 
   checkInRange(obj, cushion = 0) {
@@ -180,8 +179,7 @@ export default class MovingObject {
     let { x, y } = this.pos,
       pos = { x: x + this.currDir[0], y: y + this.currDir[1] }
 
-    this.bounceBack(pos)
-    // Make objects bounce in random direction instead of bouncing back.
+    if (this.checkOutOfBounds(pos)) this.bounceBack(pos)
 
     this.setPos(pos)
   }
