@@ -1,8 +1,8 @@
-import Display from './Display.js'
+import DOMDisplay from './DOMDisplay.js'
 import Game from './Game'
 
 const game = new Game(
-  new Display({
+  new DOMDisplay({
     width: window.innerWidth / 1.2,
     height: window.innerHeight / 1.2,
   })

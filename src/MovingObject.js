@@ -14,12 +14,12 @@ export default class MovingObject {
     this.currDir = [0, 0]
     this.posCache = []
 
-    this.moveWithCursor = this.moveWithCursor.bind(this)
-    this.move = this.move.bind(this)
+    this.movesWithCursor = this.movesWithCursor.bind(this)
+    this.moves = this.moves.bind(this)
     this.checkInRange = this.checkInRange.bind(this)
     this.hitParent = this.hitParent.bind(this)
-    this.hitPredator = this.hitPredator.bind(this)
-    this.hitChild = this.hitChild.bind(this)
+    this.hitsPredator = this.hitsPredator.bind(this)
+    this.hitsChild = this.hitsChild.bind(this)
   }
 
   setPos = (pos) => {
@@ -118,20 +118,20 @@ export default class MovingObject {
     }
 
     if (instanceOf === 'Predator' && this.constructor.name !== 'Parent') {
-      this.hitPredator(obj)
+      this.hitsPredator(obj)
     } else if (instanceOf === 'Parent') {
       this.hitParent(obj)
     } else if (instanceOf === 'Child') {
-      this.hitChild(obj)
+      this.hitsChild(obj)
     }
   }
 
   // Can't use @babel/plugin-proposal-class-properties. super.move() doesn't work in subclasses.
   hitParent(obj) {}
 
-  hitPredator(obj) {}
+  hitsPredator(obj) {}
 
-  hitChild(obj) {}
+  hitsChild(obj) {}
 
   /** Draw the object on canvas */
   draw = (ctx) => {
@@ -153,7 +153,7 @@ export default class MovingObject {
     return { x: clippedX, y: clippedY }
   }
 
-  moveWithCursor(pos, easing, offset = 0) {
+  movesWithCursor(pos, easing, offset = 0) {
     const { offsets } = this.world
     let { x, y } = pos
 
@@ -167,8 +167,7 @@ export default class MovingObject {
       yDiff = relativeY - this.pos.y
 
     // Offset children so they don't all overlap the parent when stationary or slow moving.
-    if (yDiff < 0) yDiff += offset
-
+    if (yDiff <= 0) yDiff += offset
     //More info on tweening, animation --> https://spicyyoghurt.com/tutorials/html5-javascript-game-development/create-a-smooth-canvas-animation https://stackoverflow.com/a/37973577/11279811
     const velX = xDiff * easing,
       velY = yDiff * easing
@@ -190,7 +189,7 @@ export default class MovingObject {
     this.setPosCache(posCache)
   }
 
-  move() {
+  moves() {
     let { x, y } = this.pos,
       pos = { x: x + this.currDir[0], y: y + this.currDir[1] }
 

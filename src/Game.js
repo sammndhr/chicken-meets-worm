@@ -9,17 +9,18 @@ export default class Game {
   constructor(display) {
     this.display = display
     this.mouse = { x: null, y: null }
+    this.world = null
+    this.lives = 0
     this.parentBird = null
     this.predators = []
     this.children = []
-    this.world = null
   }
 
   handleMouseMove = (e) => {
     this.mouse = { x: e.clientX, y: e.clientY }
   }
 
-  checkCollisions = () => {
+  checkInRange = () => {
     // Child collisions
     for (const child of this.children) {
       this.parentBird.checkInRange(child)
@@ -39,21 +40,79 @@ export default class Game {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-    this.parentBird.move(this.mouse)
+    this.parentBird.moves(this.mouse)
     this.parentBird.draw(ctx)
 
     for (const predator of this.predators) {
-      predator.move()
+      predator.moves()
       predator.draw(ctx)
     }
 
     for (const child of this.children) {
-      if (child.isIndependent) child.move()
+      if (child.isIndependent) child.moves()
       child.draw(ctx)
     }
 
-    this.checkCollisions()
+    this.checkInRange()
     window.requestAnimationFrame(this.draw)
+  }
+
+  initChildren = (count, radius) => {
+    const children = []
+
+    for (let i = 0; i < count; i++) {
+      const x = this.world.size.width / 2,
+        y = this.world.size.height
+      const child = new Child(
+        {
+          x,
+          y: y / 1.5,
+        },
+        radius,
+        this.world
+      )
+
+      child.setRandomDir()
+      children.push(child)
+    }
+    this.children = children
+  }
+
+  initPredators = (count, radius) => {
+    const predators = []
+
+    for (let i = 0; i < count; i++) {
+      const x = this.world.size.width / 2,
+        y = this.world.size.height
+
+      const predator = new Predator({ x, y: y / 3 }, radius, this.world)
+
+      predator.setRandomDir()
+      predators.push(predator)
+    }
+    this.predators = predators
+  }
+
+  initParent = (radius) => {
+    const initialPos = {
+      x: this.world.size.width / 2 + radius,
+      y: this.world.size.height / 2 + radius,
+    }
+
+    const parentBird = new Parent(initialPos, radius, this.world, this.lives)
+    this.parentBird = parentBird
+  }
+
+  initLives = (count) => {
+    const lives = new Lives(this.display, count)
+    lives.init()
+    this.lives = lives
+  }
+
+  initWorld = () => {
+    const world = new World(this.display)
+    world.init()
+    this.world = world
   }
 
   init = () => {
@@ -63,44 +122,11 @@ export default class Game {
 
     window.addEventListener('mousemove', this.handleMouseMove, false)
 
-    const lives = new Lives(this.display)
-    lives.init()
-
-    const world = new World(this.display)
-    world.init()
-    this.world = world
-
-    const radius = 10
-    const initialPos = {
-      x: world.size.width / 2 + radius,
-      y: world.size.height / 2 + radius,
-    }
-    const parentBird = new Parent(
-      { x: initialPos.x, y: world.size.height - 13 },
-      13,
-      world,
-      lives
-    )
-    this.parentBird = parentBird
-
-    const predators = [],
-      children = []
-
-    for (let i = 0; i < 3; i++) {
-      const predator = new Predator(initialPos, radius, world)
-      predator.setRandomDir()
-      predators.push(predator)
-    }
-
-    for (let i = 0; i < 9; i++) {
-      const child = new Child(initialPos, radius, world)
-      child.setRandomDir()
-      children.push(child)
-    }
-
-    this.predators = predators
-    this.children = children
-
+    this.initWorld()
+    this.initLives(10)
+    this.initParent(13)
+    this.initChildren(8, 10)
+    this.initPredators(8, 10)
     window.requestAnimationFrame(this.draw)
   }
 }

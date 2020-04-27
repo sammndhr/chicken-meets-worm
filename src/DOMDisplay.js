@@ -2,7 +2,7 @@
  * Related to the DOM and display (creating elements, updating elements etc.)
  */
 
-export default class Display {
+export default class DOMDisplay {
   constructor({ width = 400, height = 700 }) {
     this.game = null
     this.worldSize = { width, height }

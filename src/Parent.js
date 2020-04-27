@@ -10,10 +10,10 @@ export default class Parent extends MovingObject {
     this.currPredCols = []
     this.posCache = []
 
-    this.move = this.move.bind(this)
+    this.moves = this.moves.bind(this)
     this.checkInRange = this.checkInRange.bind(this)
-    this.hitPredator = this.hitPredator.bind(this)
-    this.hitChild = this.hitChild.bind(this)
+    this.hitsPredator = this.hitsPredator.bind(this)
+    this.hitsChild = this.hitsChild.bind(this)
   }
 
   setCurrPredCols = (currPredCols) => {
@@ -55,7 +55,7 @@ export default class Parent extends MovingObject {
       currPredCols.push(predator)
       this.setCurrPredCols(currPredCols)
 
-      this.hitPredator()
+      this.hitsPredator()
     }
 
     /* if was colliding and stopped colliding, remove predator from current collisions */
@@ -67,20 +67,20 @@ export default class Parent extends MovingObject {
     }
   }
 
-  hitPredator() {
+  hitsPredator() {
     this.lives.decrementCount()
   }
 
-  hitChild(obj) {
+  hitsChild(obj) {
     this.appendChild(obj)
     obj.setIndependence(false)
   }
 
-  move(pos) {
-    super.moveWithCursor(pos, this.easing)
+  moves(pos) {
+    super.movesWithCursor(pos, this.easing)
     const firstChild = this.children.head && this.children.head.val
 
     if (firstChild)
-      firstChild.move(this.posCache.length ? this.posCache[0] : pos)
+      firstChild.moves(this.posCache.length ? this.posCache[0] : pos)
   }
 }
