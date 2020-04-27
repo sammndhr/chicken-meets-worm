@@ -1,5 +1,5 @@
 export default class Lives {
-  constructor(display, count = 10, max = 10) {
+  constructor(display, count = 0, max = 10) {
     this.display = display
     this.count = count
     this.min = 0
@@ -11,7 +11,7 @@ export default class Lives {
   }
 
   incrementCount = () => {
-    const count = Math.max(this.count + 1, this.max)
+    const count = Math.min(this.count + 1, this.max)
     this.setCount(count)
     this.updateLives()
   }

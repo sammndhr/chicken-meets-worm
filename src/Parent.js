@@ -31,6 +31,7 @@ export default class Parent extends MovingObject {
 
   appendChild = (child) => {
     if (!this.children.search(child)) {
+      this.lives.incrementCount()
       this.score.calculateScore(this.getChildCount())
       const tail = this.children.tail,
         lastChild = tail && tail.val

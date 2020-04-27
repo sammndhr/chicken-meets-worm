@@ -139,7 +139,7 @@ export default class Game {
 
     this.initWorld()
     this.initScore()
-    this.initLives(10)
+    this.initLives(0)
     this.initParent(13)
     this.initChildren(8, 10)
     this.initPredators(8, 10)
