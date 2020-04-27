@@ -17,7 +17,7 @@ export default class MovingObject {
     this.movesWithCursor = this.movesWithCursor.bind(this)
     this.moves = this.moves.bind(this)
     this.checkInRange = this.checkInRange.bind(this)
-    this.hitParent = this.hitParent.bind(this)
+    this.hitsParent = this.hitsParent.bind(this)
     this.hitsPredator = this.hitsPredator.bind(this)
     this.hitsChild = this.hitsChild.bind(this)
   }
@@ -99,8 +99,7 @@ export default class MovingObject {
   checkInRange(obj, cushion = 0) {
     // Note: obj.constructor.name won't work with IE and there are some caveats. More info --> https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/name
 
-    const instanceOf = obj.constructor.name,
-      oPos = obj.pos,
+    const oPos = obj.pos,
       oR = obj.radius + cushion,
       { x, y } = this.pos,
       rangeX = [oPos.x - oR, oPos.x + oR],
@@ -111,23 +110,11 @@ export default class MovingObject {
       (inRange(x - r, ...rangeX) || inRange(x + r, ...rangeX)) &&
       (inRange(y - r, ...rangeY) || inRange(y + r, ...rangeY))
 
-    if (!withinRange) return
-
-    if (instanceOf === 'Predator' && this.constructor.name === 'Parent') {
-      return withinRange
-    }
-
-    if (instanceOf === 'Predator' && this.constructor.name !== 'Parent') {
-      this.hitsPredator(obj)
-    } else if (instanceOf === 'Parent') {
-      this.hitParent(obj)
-    } else if (instanceOf === 'Child') {
-      this.hitsChild(obj)
-    }
+    return withinRange
   }
 
   // Can't use @babel/plugin-proposal-class-properties. super.move() doesn't work in subclasses.
-  hitParent(obj) {}
+  hitsParent(obj) {}
 
   hitsPredator(obj) {}
 

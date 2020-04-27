@@ -23,16 +23,19 @@ export default class Game {
   }
 
   checkInRange = () => {
+    const parent = this.parentBird
     // Child collisions
     for (const child of this.children) {
-      this.parentBird.checkInRange(child)
+      if (parent.checkInRange(child)) parent.hitsChild(child)
       for (const predator of this.predators) {
-        child.checkInRange(predator, 5)
+        if (child.checkInRange(predator, 10)) child.hitsPredator()
+        if (child.checkInRange(predator, 0)) console.log('dead')
       }
     }
     // Parent collisions
     for (const predator of this.predators) {
-      this.parentBird.checkInRange(predator)
+      if (parent.checkInRange(predator))
+        parent.checkCollisionWithPredator(predator)
     }
   }
 

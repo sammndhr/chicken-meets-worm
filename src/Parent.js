@@ -16,7 +16,7 @@ export default class Parent extends MovingObject {
     this.posCache = []
 
     this.moves = this.moves.bind(this)
-    this.checkInRange = this.checkInRange.bind(this)
+    // this.checkInRange = this.checkInRange.bind(this)
     this.hitsPredator = this.hitsPredator.bind(this)
     this.hitsChild = this.hitsChild.bind(this)
   }
@@ -42,12 +42,6 @@ export default class Parent extends MovingObject {
       child.setChainPos(this.getChildCount())
       child.parent = this
     }
-  }
-
-  checkInRange(obj, cushion = 0) {
-    if (obj.constructor.name === 'Predator')
-      this.checkCollisionWithPredator(obj)
-    else super.checkInRange(obj, cushion)
   }
 
   checkCollisionWithPredator = (predator) => {
