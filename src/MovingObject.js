@@ -5,7 +5,7 @@ const r = 10,
   v = { dx: 1, dy: 1 }
 
 export default class MovingObject {
-  constructor(pos, radius = r, world, color = c, vel = v) {
+  constructor(pos, radius = r, world, vel = v, color = c) {
     this.pos = pos
     this.radius = radius
     this.world = world

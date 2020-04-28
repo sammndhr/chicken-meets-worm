@@ -5,8 +5,8 @@ const r = 10,
   v = { dx: 1, dy: 1 }
 
 export default class Child extends MovingObject {
-  constructor(pos, radius = r, world, color = c, vel = v) {
-    super(pos, radius, world, color, vel)
+  constructor(pos, radius = r, world, vel = v, color = c) {
+    super(pos, radius, world, vel, color)
     this.independence = true
     this.chainPos = null
     this.parent = null

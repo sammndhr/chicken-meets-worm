@@ -6,11 +6,21 @@ const r = 13,
   e = 0.9
 
 export default class Parent extends MovingObject {
-  constructor(pos, radius = r, world, lives, score, color = c, easing = e) {
-    super(pos, radius, world, color)
+  constructor(
+    pos,
+    radius = r,
+    world,
+    lives,
+    score,
+    energy,
+    color = c,
+    easing = e
+  ) {
+    super(pos, radius, world, null, color)
     this.children = new LinkedList()
     this.lives = lives
     this.score = score
+    this.energy = energy
     this.easing = easing
     this.currPredCols = []
     this.posCache = []
@@ -86,6 +96,7 @@ export default class Parent extends MovingObject {
 
   hitsPredator() {
     this.lives.reset()
+    this.energy.decrementCount()
     const children = this.children.toArray()
     for (const child of children) {
       child.setParent(null)
@@ -101,8 +112,9 @@ export default class Parent extends MovingObject {
     obj.setIndependence(false)
   }
 
-  hitsWorm(obj) {
-    console.log('hit worm')
+  hitsWorm(game, worm) {
+    this.energy.incrementCount()
+    game.destroyWorm(worm)
   }
 
   moves(pos) {

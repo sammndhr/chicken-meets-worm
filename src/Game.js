@@ -10,7 +10,7 @@ import World from './World.js'
 import Worm from './Worm.js'
 
 export default class Game {
-  constructor(display, childCount = 10, predatorCount = 4, wormCount = 5) {
+  constructor(display, childCount = 10, predatorCount = 4, wormCount = 1) {
     this.display = display
     this.mouse = { x: null, y: null }
     this.world = null
@@ -23,16 +23,21 @@ export default class Game {
     this.wormCount = wormCount
     this.lives = null
     this.energy = null
-    this.score = 0
+    this.score = null
+    this.timeSinceWorm = 0
   }
 
   handleMouseMove = (e) => {
     this.mouse = { x: e.clientX, y: e.clientY }
   }
 
+  destroyWorm = (worm) => {
+    this.worms.deleteNode(worm)
+  }
+
   destroyChild = (child) => {
     this.children.deleteNode(child)
-    this.spawnChildren(10)
+    this.spawnChildren(this.childCount)
   }
 
   checkInRange = () => {
@@ -56,11 +61,16 @@ export default class Game {
     }
 
     for (const worm of worms) {
-      if (parent.checkInRange(worm, 2)) parent.hitsWorm(worm)
+      if (parent.checkInRange(worm, 2)) parent.hitsWorm(this, worm)
     }
   }
 
-  draw = () => {
+  draw = (timestamp) => {
+    const timePassed = timestamp - this.timeSinceWorm
+    if (timePassed >= 2500 && this.worms.size <= 0) {
+      this.spawnWorms(5)
+      this.timeSinceWorm = timestamp
+    }
     const canvas = this.world.canvas,
       ctx = canvas.getContext('2d'),
       children = this.children.toArray(),
@@ -78,7 +88,7 @@ export default class Game {
     }
 
     for (const worm of worms) {
-      worm.moves()
+      worm.moves(this)
       worm.draw(ctx)
     }
 
@@ -137,7 +147,8 @@ export default class Game {
       radius,
       this.world,
       this.lives,
-      this.score
+      this.score,
+      this.energy
     )
     this.parent = parent
   }

@@ -5,7 +5,7 @@ const r = 10,
   v = { dx: 1, dy: 1 }
 
 export default class Predator extends MovingObject {
-  constructor(pos, radius = r, world, color = c, vel = v) {
-    super(pos, radius, world, color, vel)
+  constructor(pos, radius = r, world, vel = v, color = c) {
+    super(pos, radius, world, vel, color)
   }
 }

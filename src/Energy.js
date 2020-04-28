@@ -1,5 +1,5 @@
 export default class Energy {
-  constructor(display, energy = 0, max = 5) {
+  constructor(display, energy = 5, max = 5) {
     this.display = display
     this.count = energy
     this.min = 0
