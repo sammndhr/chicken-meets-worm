@@ -31,11 +31,13 @@ export default class Parent extends MovingObject {
 
   deleteLastChild = () => {
     let curr = this.children.deleteFromTail()
-    curr.setParent(null)
-    curr.setChainPos(null)
-    curr.setNextChild(null)
-    curr.setIndependence(true)
-    this.lives.decrementCount()
+    if (curr) {
+      curr.setChainPos(null)
+      curr.setNextChild(null)
+      curr.setIndependence(true)
+      this.lives.decrementCount()
+      curr.setParent(null)
+    }
     return curr
   }
 
@@ -97,6 +99,10 @@ export default class Parent extends MovingObject {
   hitsChild(obj) {
     this.appendChild(obj)
     obj.setIndependence(false)
+  }
+
+  hitsWorm(obj) {
+    console.log('hit worm')
   }
 
   moves(pos) {

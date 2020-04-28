@@ -7,17 +7,20 @@ import Predator from './Predator.js'
 import Score from './Score.js'
 import './style.css'
 import World from './World.js'
+import Worm from './Worm.js'
 
 export default class Game {
-  constructor(display, childCount = 10, predatorCount = 4) {
+  constructor(display, childCount = 10, predatorCount = 4, wormCount = 5) {
     this.display = display
     this.mouse = { x: null, y: null }
     this.world = null
     this.parent = null
     this.predators = new LinkedList()
     this.children = new LinkedList()
+    this.worms = new LinkedList()
     this.childCount = childCount
     this.predatorCount = predatorCount
+    this.wormCount = wormCount
     this.lives = null
     this.energy = null
     this.score = 0
@@ -32,27 +35,18 @@ export default class Game {
     this.spawnChildren(10)
   }
 
-  childHitsPredator = (child) => {
-    if (child.isIndependent()) this.destroyChild(child)
-    else {
-      let curr = this.parent.deleteLastChild()
-      while (curr && curr !== child) {
-        curr = this.parent.deleteLastChild()
-      }
-    }
-  }
-
   checkInRange = () => {
     const parent = this.parent,
       children = this.children.toArray(),
-      predators = this.predators.toArray()
+      predators = this.predators.toArray(),
+      worms = this.worms.toArray()
 
     // Child collisions
     for (const child of children) {
       if (parent.checkInRange(child)) parent.hitsChild(child)
       for (const predator of predators) {
         if (child.checkInRange(predator, 10)) child.avoidPredator()
-        if (child.checkInRange(predator, 0)) this.childHitsPredator(child)
+        if (child.checkInRange(predator, 0)) child.hitsPredator(this)
       }
     }
     // Parent collisions
@@ -60,13 +54,18 @@ export default class Game {
       if (parent.checkInRange(predator, 5))
         parent.checkCollisionWithPredator(predator)
     }
+
+    for (const worm of worms) {
+      if (parent.checkInRange(worm, 2)) parent.hitsWorm(worm)
+    }
   }
 
   draw = () => {
     const canvas = this.world.canvas,
       ctx = canvas.getContext('2d'),
       children = this.children.toArray(),
-      predators = this.predators.toArray()
+      predators = this.predators.toArray(),
+      worms = this.worms.toArray()
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -78,6 +77,11 @@ export default class Game {
       predator.draw(ctx)
     }
 
+    for (const worm of worms) {
+      worm.moves()
+      worm.draw(ctx)
+    }
+
     for (const child of children) {
       if (child.independence) child.moves()
       child.draw(ctx)
@@ -87,8 +91,7 @@ export default class Game {
     window.requestAnimationFrame(this.draw)
   }
 
-  spawnChildren = (radius) => {
-    const r = radius
+  spawnChildren = (r) => {
     while (this.children.size < this.childCount) {
       const randomPos = this.world.getRandomPos(r),
         child = new Child(randomPos, r, this.world)
@@ -97,13 +100,21 @@ export default class Game {
     }
   }
 
-  spawnPredators = (radius) => {
-    const r = radius
+  spawnPredators = (r) => {
     while (this.predators.size < this.predatorCount) {
       const randomPos = this.world.getRandomPos(r),
         predator = new Predator(randomPos, r, this.world)
       predator.setRandomDir()
       this.predators.appendToTail(predator)
+    }
+  }
+
+  spawnWorms = (r) => {
+    while (this.worms.size < this.wormCount) {
+      const randomPos = this.world.getRandomPos(r),
+        worm = new Worm(randomPos, r, this.world)
+      worm.setRandomDir()
+      this.worms.appendToTail(worm)
     }
   }
 
@@ -129,6 +140,10 @@ export default class Game {
       this.score
     )
     this.parent = parent
+  }
+
+  initWorms = (radius) => {
+    this.spawnWorms(radius)
   }
 
   initLives = (count) => {
@@ -171,6 +186,7 @@ export default class Game {
     this.initParent(13)
     this.initChildren(10)
     this.initPredators(10)
+    this.initWorms(5)
     window.requestAnimationFrame(this.draw)
   }
 }

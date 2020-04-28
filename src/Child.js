@@ -13,6 +13,7 @@ export default class Child extends MovingObject {
     this.nextChild = null
     this.posCache = []
     this.moves = this.moves.bind(this)
+    this.hitsPredator = this.hitsPredator.bind(this)
   }
 
   setParent = (parent) => {
@@ -48,12 +49,22 @@ export default class Child extends MovingObject {
     }
   }
 
+  hitsPredator(game) {
+    if (this.isIndependent()) game.destroyChild(this)
+    else {
+      let curr = this.parent.deleteLastChild()
+      while (curr && curr !== this) {
+        curr = this.parent.deleteLastChild()
+      }
+    }
+  }
+
   moves(pos) {
     if (this.isIndependent()) super.moves()
     else {
       const easing = Math.max(1 - this.chainPos * 0.13, 0.1),
         r = this.radius,
-        offset = 2 * r * this.chainPos + (this.parent.radius - r),
+        offset = 2 * (r + 1) * this.chainPos + (this.parent.radius - r),
         nextChild = this.nextChild
 
       super.movesWithCursor(pos, easing, offset)
