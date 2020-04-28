@@ -9,6 +9,7 @@ import './style.css'
 import World from './World.js'
 import Worm from './Worm.js'
 
+let animationReq = null
 export default class Game {
   constructor(display, childCount = 10, predatorCount = 4, wormCount = 1) {
     this.display = display
@@ -66,6 +67,11 @@ export default class Game {
   }
 
   draw = (timestamp) => {
+    if (this.energy.count === 0) {
+      window.cancelAnimationFrame(animationReq)
+      this.display.renderGameOverMessage()
+      return
+    }
     const timePassed = timestamp - this.timeSinceWorm
     if (timePassed >= 2500 && this.worms.size <= 0) {
       this.spawnWorms(5)
@@ -98,7 +104,7 @@ export default class Game {
     }
 
     this.checkInRange()
-    window.requestAnimationFrame(this.draw)
+    animationReq = window.requestAnimationFrame(this.draw)
   }
 
   spawnChildren = (r) => {
@@ -198,6 +204,6 @@ export default class Game {
     this.initChildren(10)
     this.initPredators(10)
     this.initWorms(5)
-    window.requestAnimationFrame(this.draw)
+    animationReq = window.requestAnimationFrame(this.draw)
   }
 }

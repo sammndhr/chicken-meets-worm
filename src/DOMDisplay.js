@@ -68,4 +68,9 @@ export default class DOMDisplay {
     scoreWrapper.append(scoreLabel)
     scoreWrapper.append(score)
   }
+
+  renderGameOverMessage = () => {
+    const message = this.createElement('div', 'game-over', null, 'Game Over!')
+    this.game.append(message)
+  }
 }
