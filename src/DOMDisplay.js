@@ -39,6 +39,16 @@ export default class DOMDisplay {
     this.world = world
   }
 
+  renderEnergy = () => {
+    const energyWrapper = this.createElement('div', 'energy-wrapper')
+    const energyLabel = this.createElement('span', 'label', null, 'energy: ')
+    const energy = this.createElement('span', 'energy', 'energy')
+
+    this.game.append(energyWrapper)
+    energyWrapper.append(energyLabel)
+    energyWrapper.append(energy)
+  }
+
   renderLives = () => {
     const livesWrapper = this.createElement('div', 'lives-wrapper')
     const livesLabel = this.createElement('span', 'label', null, 'Lives: ')

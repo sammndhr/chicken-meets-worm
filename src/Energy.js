@@ -1,7 +1,7 @@
-export default class Lives {
-  constructor(display, count = 1, max = 10) {
+export default class Energy {
+  constructor(display, energy = 0, max = 5) {
     this.display = display
-    this.count = count
+    this.count = energy
     this.min = 0
     this.max = max
   }
@@ -11,27 +11,27 @@ export default class Lives {
   }
 
   reset = () => {
-    this.setCount(1)
-    this.updateLives()
+    this.setCount(0)
+    this.updateEnergy()
   }
 
   incrementCount = () => {
     const count = Math.min(this.count + 1, this.max)
     this.setCount(count)
-    this.updateLives()
+    this.updateEnergy()
   }
 
   decrementCount = () => {
     const count = this.count
     this.count = Math.max(count - 1, this.min)
-    this.updateLives()
+    this.updateEnergy()
   }
 
-  updateLives = () => {
-    this.display.updateElement('#lives', this.count)
+  updateEnergy = () => {
+    this.display.updateElement('#energy', this.count)
   }
 
   init = () => {
-    this.updateLives()
+    this.updateEnergy()
   }
 }

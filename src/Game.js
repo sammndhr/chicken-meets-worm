@@ -1,5 +1,6 @@
 import { LinkedList } from 'data_structures'
 import Child from './Child.js'
+import Energy from './Energy.js'
 import Lives from './Lives.js'
 import Parent from './Parent.js'
 import Predator from './Predator.js'
@@ -17,7 +18,8 @@ export default class Game {
     this.children = new LinkedList()
     this.childCount = childCount
     this.predatorCount = predatorCount
-    this.lives = 0
+    this.lives = null
+    this.energy = null
     this.score = 0
   }
 
@@ -147,17 +149,25 @@ export default class Game {
     this.score = score
   }
 
+  initEnergy = () => {
+    const energy = new Energy(this.display)
+    energy.init()
+    this.energy = energy
+  }
+
   init = () => {
     this.display.renderGame()
     this.display.renderScore()
     this.display.renderLives()
+    this.display.renderEnergy()
     this.display.renderWorld()
 
     window.addEventListener('mousemove', this.handleMouseMove, false)
 
+    this.initEnergy()
     this.initWorld()
     this.initScore()
-    this.initLives(0)
+    this.initLives(1)
     this.initParent(13)
     this.initChildren(10)
     this.initPredators(10)
