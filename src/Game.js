@@ -4,6 +4,8 @@ import Child from './Child.js'
 import Energy from './Energy.js'
 import childImg from './imgs/child.png'
 import parentImage from './imgs/parent.png'
+import predatorImage from './imgs/predator.png'
+import wormImage from './imgs/worm.png'
 import Parent from './Parent.js'
 import Predator from './Predator.js'
 import Score from './Score.js'
@@ -15,6 +17,10 @@ const ChildSprite = new Image()
 ChildSprite.src = childImg
 const ParentSprite = new Image()
 ParentSprite.src = parentImage
+const PredatorSprite = new Image()
+PredatorSprite.src = predatorImage
+const WormSprite = new Image()
+WormSprite.src = wormImage
 
 export default class Game {
   constructor(display, childCount = 10, predatorCount = 4, wormCount = 1) {
@@ -45,7 +51,7 @@ export default class Game {
 
   destroyChild = (child) => {
     this.children.deleteNode(child)
-    this.spawnChildren(this.childCount)
+    this.spawnChildren(17.5)
   }
 
   checkInRange = () => {
@@ -86,18 +92,22 @@ export default class Game {
   }
 
   spawnPredators = (r) => {
+    const size = { width: r * 2, height: r * 2 }
+
     while (this.predators.size < this.predatorCount) {
       const randomPos = this.world.getRandomPos(r),
-        predator = new Predator(randomPos, r, this.world)
+        predator = new Predator(randomPos, r, this.world, PredatorSprite, size)
       predator.setRandomDir()
       this.predators.appendToTail(predator)
     }
   }
 
   spawnWorms = (r) => {
+    const size = { width: r * 2, height: r * 2 }
+
     while (this.worms.size < this.wormCount) {
       const randomPos = this.world.getRandomPos(r),
-        worm = new Worm(randomPos, r, this.world)
+        worm = new Worm(randomPos, r, this.world, WormSprite, size)
       worm.setRandomDir()
       this.worms.appendToTail(worm)
     }
@@ -168,7 +178,7 @@ export default class Game {
 
     const timePassed = timestamp - this.timeSinceWorm
     if (timePassed >= 2500 && this.worms.size <= 0) {
-      this.spawnWorms(5)
+      this.spawnWorms(20)
       this.timeSinceWorm = timestamp
     }
 
@@ -216,8 +226,8 @@ export default class Game {
     this.initChain(1)
     this.initParent(30)
     this.initChildren(17.5)
-    this.initPredators(10)
-    this.initWorms(5)
+    this.initPredators(35)
+    this.initWorms(20)
     this.animationReq = window.requestAnimationFrame(this.draw)
   }
 }
