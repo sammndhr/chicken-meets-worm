@@ -10,7 +10,7 @@ export default class Parent extends MovingObject {
     pos,
     radius = r,
     world,
-    lives,
+    chain,
     score,
     energy,
     color = c,
@@ -18,7 +18,7 @@ export default class Parent extends MovingObject {
   ) {
     super(pos, radius, world, null, color)
     this.children = new LinkedList()
-    this.lives = lives
+    this.chain = chain
     this.score = score
     this.energy = energy
     this.easing = easing
@@ -45,7 +45,7 @@ export default class Parent extends MovingObject {
       curr.setChainPos(null)
       curr.setNextChild(null)
       curr.setIndependence(true)
-      this.lives.decrementCount()
+      this.chain.decrementCount()
       curr.setParent(null)
     }
     return curr
@@ -57,7 +57,7 @@ export default class Parent extends MovingObject {
 
   appendChild = (child) => {
     if (!this.children.search(child)) {
-      this.lives.incrementCount()
+      this.chain.incrementCount()
       this.score.calculateScore(this.getChildCount())
       const tail = this.children.tail,
         lastChild = tail && tail.val
@@ -76,7 +76,7 @@ export default class Parent extends MovingObject {
 
     /* if collided and first contact,
       add predator to the current collisions with predator,
-      call collide with predator (decrement lives)
+      call collide with predator (decrement chain count)
     */
     if (collided && !colliding) {
       const currPredCols = this.currPredCols.slice()
@@ -95,7 +95,7 @@ export default class Parent extends MovingObject {
   }
 
   hitsPredator() {
-    this.lives.reset()
+    this.chain.reset()
     this.energy.decrementCount()
     const children = this.children.toArray()
     for (const child of children) {

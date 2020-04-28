@@ -1,7 +1,7 @@
 import { LinkedList } from 'data_structures'
+import Chain from './Chain.js'
 import Child from './Child.js'
 import Energy from './Energy.js'
-import Lives from './Lives.js'
 import Parent from './Parent.js'
 import Predator from './Predator.js'
 import Score from './Score.js'
@@ -21,7 +21,7 @@ export default class Game {
     this.childCount = childCount
     this.predatorCount = predatorCount
     this.wormCount = wormCount
-    this.lives = null
+    this.chain = null
     this.energy = null
     this.score = null
     this.timeSinceWorm = 0
@@ -146,7 +146,7 @@ export default class Game {
       initialPos,
       radius,
       this.world,
-      this.lives,
+      this.chain,
       this.score,
       this.energy
     )
@@ -157,10 +157,10 @@ export default class Game {
     this.spawnWorms(radius)
   }
 
-  initLives = (count) => {
-    const lives = new Lives(this.display, count)
-    lives.init()
-    this.lives = lives
+  initChain = (count) => {
+    const chain = new Chain(this.display, count)
+    chain.init()
+    this.chain = chain
   }
 
   initWorld = () => {
@@ -184,7 +184,7 @@ export default class Game {
   init = () => {
     this.display.renderGame()
     this.display.renderScore()
-    this.display.renderLives()
+    this.display.renderChain()
     this.display.renderEnergy()
     this.display.renderWorld()
 
@@ -193,7 +193,7 @@ export default class Game {
     this.initEnergy()
     this.initWorld()
     this.initScore()
-    this.initLives(1)
+    this.initChain(1)
     this.initParent(13)
     this.initChildren(10)
     this.initPredators(10)

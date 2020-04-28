@@ -49,14 +49,14 @@ export default class DOMDisplay {
     energyWrapper.append(energy)
   }
 
-  renderLives = () => {
-    const livesWrapper = this.createElement('div', 'lives-wrapper')
-    const livesLabel = this.createElement('span', 'label', null, 'Lives: ')
-    const lives = this.createElement('span', 'lives', 'lives')
+  renderChain = () => {
+    const chainWrapper = this.createElement('div', 'chain-wrapper')
+    const chainLabel = this.createElement('span', 'label', null, 'Chain: ')
+    const chain = this.createElement('span', 'chain', 'chain')
 
-    this.game.append(livesWrapper)
-    livesWrapper.append(livesLabel)
-    livesWrapper.append(lives)
+    this.game.append(chainWrapper)
+    chainWrapper.append(chainLabel)
+    chainWrapper.append(chain)
   }
 
   renderScore = () => {
