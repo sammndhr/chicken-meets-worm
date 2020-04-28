@@ -15,6 +15,10 @@ export default class Child extends MovingObject {
     this.moves = this.moves.bind(this)
   }
 
+  setParent = (parent) => {
+    this.parent = parent
+  }
+
   setChainPos = (chainPos) => {
     this.chainPos = chainPos
     console.log()

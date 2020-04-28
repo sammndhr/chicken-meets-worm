@@ -10,6 +10,11 @@ export default class Lives {
     this.count = count
   }
 
+  reset = () => {
+    this.setCount(0)
+    this.updateLives()
+  }
+
   incrementCount = () => {
     const count = Math.min(this.count + 1, this.max)
     this.setCount(count)

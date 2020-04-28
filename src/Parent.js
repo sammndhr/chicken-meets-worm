@@ -40,7 +40,7 @@ export default class Parent extends MovingObject {
       this.children.appendToTail(child)
 
       child.setChainPos(this.getChildCount())
-      child.parent = this
+      child.setParent(this)
     }
   }
 
@@ -69,7 +69,15 @@ export default class Parent extends MovingObject {
   }
 
   hitsPredator() {
-    this.lives.decrementCount()
+    this.lives.reset()
+    const children = this.children.toArray()
+    for (const child of children) {
+      child.setParent(null)
+      child.setChainPos(null)
+      child.setNextChild(null)
+      child.setIndependence(true)
+    }
+    this.children = new LinkedList()
   }
 
   hitsChild(obj) {
