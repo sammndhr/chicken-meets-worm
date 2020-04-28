@@ -191,21 +191,21 @@ export default class Game {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     this.parent.moves(this.mouse)
-    this.parent.draw(ctx)
+    this.parent.draw(ctx, { x: 30, y: 25 })
 
     for (const predator of predators) {
       predator.moves()
-      predator.draw(ctx)
+      predator.draw(ctx, { x: 30, y: 25 })
     }
 
     for (const worm of worms) {
       worm.moves(this)
-      worm.draw(ctx)
+      worm.draw(ctx, { x: 0, y: 0 })
     }
 
     for (const child of children) {
       if (child.independence) child.moves()
-      child.draw(ctx)
+      child.draw(ctx, { x: 15, y: 15 })
     }
 
     this.checkInRange()

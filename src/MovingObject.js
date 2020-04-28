@@ -5,10 +5,12 @@ const r = 10,
   v = { dx: 1, dy: 1 }
 
 export default class MovingObject {
-  constructor(pos, radius = r, world, vel = v, color = c) {
+  constructor(pos, radius = r, world, sprite, size, vel = v, color = c) {
     this.pos = pos
     this.radius = radius
     this.world = world
+    this.sprite = sprite
+    this.size = size
     this.color = color
     this.vel = vel
     this.currDir = [0, 0]
@@ -121,13 +123,15 @@ export default class MovingObject {
   hitsChild(obj) {}
 
   /** Draw the object on canvas */
-  draw(ctx) {
+  draw = (ctx, offset = { x: 0, y: 0 }) => {
     const { x, y } = this.pos
-    ctx.beginPath()
-    ctx.arc(x, y, this.radius, 0, Math.PI * 2)
-    ctx.fillStyle = this.color
-    ctx.fill()
-    ctx.closePath()
+    ctx.drawImage(
+      this.sprite,
+      x - offset.x,
+      y - offset.y,
+      this.size.width,
+      this.size.height
+    )
   }
 
   clipPos = ({ x, y }) => {

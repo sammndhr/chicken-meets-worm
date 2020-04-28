@@ -14,7 +14,7 @@ export default class Child extends MovingObject {
     vel = v,
     color = c
   ) {
-    super(pos, radius, world, vel, color)
+    super(pos, radius, world, sprite, size, vel, color)
     this.independence = true
     this.chainPos = null
     this.parent = null
@@ -22,7 +22,6 @@ export default class Child extends MovingObject {
     this.posCache = []
     this.moves = this.moves.bind(this)
     this.hitsPredator = this.hitsPredator.bind(this)
-    this.draw = this.draw.bind(this)
     this.sprite = sprite
     this.size = size
   }
@@ -45,11 +44,6 @@ export default class Child extends MovingObject {
 
   isIndependent = () => {
     return this.independence
-  }
-
-  draw(ctx) {
-    const { x, y } = this.pos
-    ctx.drawImage(this.sprite, x, y, this.size.width, this.size.height)
   }
 
   avoidPredator = () => {

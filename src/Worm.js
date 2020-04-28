@@ -14,15 +14,10 @@ export default class Child extends MovingObject {
     vel = v,
     color = c
   ) {
-    super(pos, radius, world, vel, color)
+    super(pos, radius, world, sprite, size, vel, color)
     this.sprite = sprite
     this.size = size
-    this.draw = this.draw.bind(this)
     this.moves = this.moves.bind(this)
-  }
-  draw(ctx) {
-    const { x, y } = this.pos
-    ctx.drawImage(this.sprite, x, y, this.size.width, this.size.height)
   }
 
   moves(game) {
