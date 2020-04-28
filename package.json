@@ -1,5 +1,5 @@
 {
-  "name": "wings-over-water",
+  "name": "chicken-meets-worm",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mrinalini-m/wings-over-water.git"
+    "url": "git+https://github.com/mrinalini-m/chicken-meets-worm.git"
   },
   "keywords": [],
   "author": "Mrinalini 'Sam' Manandhar",
@@ -30,9 +30,9 @@
     "webpack-dev-server": "^3.10.3"
   },
   "bugs": {
-    "url": "https://github.com/mrinalini-m/wings-over-water/issues"
+    "url": "https://github.com/mrinalini-m/chicken-meets-worm/issues"
   },
-  "homepage": "https://github.com/mrinalini-m/wings-over-water#readme",
+  "homepage": "https://github.com/mrinalini-m/chicken-meets-worm#readme",
   "dependencies": {
     "data_structures": "git+https://github.com/mrinalini-m/data_structures.git"
   }
