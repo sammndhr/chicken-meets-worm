@@ -29,6 +29,20 @@ export default class Parent extends MovingObject {
     return this.children.size
   }
 
+  deleteLastChild = () => {
+    let curr = this.children.deleteFromTail()
+    curr.setParent(null)
+    curr.setChainPos(null)
+    curr.setNextChild(null)
+    curr.setIndependence(true)
+    this.lives.decrementCount()
+    return curr
+  }
+
+  destroyChild = (child) => {
+    this.children.deleteNode(child)
+  }
+
   appendChild = (child) => {
     if (!this.children.search(child)) {
       this.lives.incrementCount()
@@ -47,6 +61,7 @@ export default class Parent extends MovingObject {
   checkCollisionWithPredator = (predator) => {
     const collided = super.checkInRange(predator),
       colliding = this.currPredCols.includes(predator)
+
     /* if collided and first contact,
       add predator to the current collisions with predator,
       call collide with predator (decrement lives)
@@ -55,7 +70,6 @@ export default class Parent extends MovingObject {
       const currPredCols = this.currPredCols.slice()
       currPredCols.push(predator)
       this.setCurrPredCols(currPredCols)
-
       this.hitsPredator()
     }
 

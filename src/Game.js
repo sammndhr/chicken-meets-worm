@@ -8,11 +8,11 @@ import './style.css'
 import World from './World.js'
 
 export default class Game {
-  constructor(display, childCount = 10, predatorCount = 10) {
+  constructor(display, childCount = 10, predatorCount = 4) {
     this.display = display
     this.mouse = { x: null, y: null }
     this.world = null
-    this.parentBird = null
+    this.parent = null
     this.predators = new LinkedList()
     this.children = new LinkedList()
     this.childCount = childCount
@@ -31,11 +31,17 @@ export default class Game {
   }
 
   childHitsPredator = (child) => {
-    this.destroyChild(child)
+    if (child.isIndependent()) this.destroyChild(child)
+    else {
+      let curr = this.parent.deleteLastChild()
+      while (curr && curr !== child) {
+        curr = this.parent.deleteLastChild()
+      }
+    }
   }
 
   checkInRange = () => {
-    const parent = this.parentBird,
+    const parent = this.parent,
       children = this.children.toArray(),
       predators = this.predators.toArray()
 
@@ -44,14 +50,12 @@ export default class Game {
       if (parent.checkInRange(child)) parent.hitsChild(child)
       for (const predator of predators) {
         if (child.checkInRange(predator, 10)) child.avoidPredator()
-        if (child.isIndependent() && child.checkInRange(predator, 0)) {
-          this.childHitsPredator(child)
-        }
+        if (child.checkInRange(predator, 0)) this.childHitsPredator(child)
       }
     }
     // Parent collisions
     for (const predator of predators) {
-      if (parent.checkInRange(predator))
+      if (parent.checkInRange(predator, 5))
         parent.checkCollisionWithPredator(predator)
     }
   }
@@ -64,8 +68,8 @@ export default class Game {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-    this.parentBird.moves(this.mouse)
-    this.parentBird.draw(ctx)
+    this.parent.moves(this.mouse)
+    this.parent.draw(ctx)
 
     for (const predator of predators) {
       predator.moves()
@@ -115,14 +119,14 @@ export default class Game {
       y: this.world.size.height / 2 + radius,
     }
 
-    const parentBird = new Parent(
+    const parent = new Parent(
       initialPos,
       radius,
       this.world,
       this.lives,
       this.score
     )
-    this.parentBird = parentBird
+    this.parent = parent
   }
 
   initLives = (count) => {
