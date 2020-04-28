@@ -2,6 +2,8 @@ import { LinkedList } from 'data_structures'
 import Chain from './Chain.js'
 import Child from './Child.js'
 import Energy from './Energy.js'
+import childImg from './imgs/child.png'
+import parentImage from './imgs/parent.png'
 import Parent from './Parent.js'
 import Predator from './Predator.js'
 import Score from './Score.js'
@@ -9,7 +11,11 @@ import './style.css'
 import World from './World.js'
 import Worm from './Worm.js'
 
-let animationReq = null
+const ChildSprite = new Image()
+ChildSprite.src = childImg
+const ParentSprite = new Image()
+ParentSprite.src = parentImage
+
 export default class Game {
   constructor(display, childCount = 10, predatorCount = 4, wormCount = 1) {
     this.display = display
@@ -26,6 +32,7 @@ export default class Game {
     this.energy = null
     this.score = null
     this.timeSinceWorm = 0
+    this.animationReq = null
   }
 
   handleMouseMove = (e) => {
@@ -47,7 +54,7 @@ export default class Game {
       predators = this.predators.toArray(),
       worms = this.worms.toArray()
 
-    // Child collisions
+    // Child predator collisions
     for (const child of children) {
       if (parent.checkInRange(child)) parent.hitsChild(child)
       for (const predator of predators) {
@@ -55,62 +62,24 @@ export default class Game {
         if (child.checkInRange(predator, 0)) child.hitsPredator(this)
       }
     }
-    // Parent collisions
+    // Parent predator collisions
     for (const predator of predators) {
       if (parent.checkInRange(predator, 5))
         parent.checkCollisionWithPredator(predator)
     }
 
+    //Parent worm collisions
     for (const worm of worms) {
       if (parent.checkInRange(worm, 2)) parent.hitsWorm(this, worm)
     }
   }
 
-  draw = (timestamp) => {
-    if (this.energy.count === 0) {
-      window.cancelAnimationFrame(animationReq)
-      this.display.renderGameOverMessage()
-      return
-    }
-    const timePassed = timestamp - this.timeSinceWorm
-    if (timePassed >= 2500 && this.worms.size <= 0) {
-      this.spawnWorms(5)
-      this.timeSinceWorm = timestamp
-    }
-    const canvas = this.world.canvas,
-      ctx = canvas.getContext('2d'),
-      children = this.children.toArray(),
-      predators = this.predators.toArray(),
-      worms = this.worms.toArray()
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-    this.parent.moves(this.mouse)
-    this.parent.draw(ctx)
-
-    for (const predator of predators) {
-      predator.moves()
-      predator.draw(ctx)
-    }
-
-    for (const worm of worms) {
-      worm.moves(this)
-      worm.draw(ctx)
-    }
-
-    for (const child of children) {
-      if (child.independence) child.moves()
-      child.draw(ctx)
-    }
-
-    this.checkInRange()
-    animationReq = window.requestAnimationFrame(this.draw)
-  }
-
   spawnChildren = (r) => {
+    const size = { width: r * 2, height: r * 2 }
     while (this.children.size < this.childCount) {
       const randomPos = this.world.getRandomPos(r),
-        child = new Child(randomPos, r, this.world)
+        child = new Child(randomPos, r, this.world, ChildSprite, size)
+
       child.setRandomDir()
       this.children.appendToTail(child)
     }
@@ -142,19 +111,22 @@ export default class Game {
     this.spawnPredators(radius)
   }
 
-  initParent = (radius) => {
+  initParent = (r) => {
+    const size = { width: r * 2, height: r * 2 }
     const initialPos = {
-      x: this.world.size.width / 2 + radius,
-      y: this.world.size.height / 2 + radius,
+      x: this.world.size.width / 2 + r,
+      y: this.world.size.height / 2 + r,
     }
 
     const parent = new Parent(
       initialPos,
-      radius,
+      r,
       this.world,
       this.chain,
       this.score,
-      this.energy
+      this.energy,
+      ParentSprite,
+      size
     )
     this.parent = parent
   }
@@ -187,6 +159,49 @@ export default class Game {
     this.energy = energy
   }
 
+  draw = (timestamp) => {
+    if (this.energy.count === 0) {
+      window.cancelAnimationFrame(this.animationReq)
+      this.display.renderGameOverMessage()
+      return
+    }
+
+    const timePassed = timestamp - this.timeSinceWorm
+    if (timePassed >= 2500 && this.worms.size <= 0) {
+      this.spawnWorms(5)
+      this.timeSinceWorm = timestamp
+    }
+
+    const canvas = this.world.canvas,
+      ctx = canvas.getContext('2d'),
+      children = this.children.toArray(),
+      predators = this.predators.toArray(),
+      worms = this.worms.toArray()
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+    this.parent.moves(this.mouse)
+    this.parent.draw(ctx)
+
+    for (const predator of predators) {
+      predator.moves()
+      predator.draw(ctx)
+    }
+
+    for (const worm of worms) {
+      worm.moves(this)
+      worm.draw(ctx)
+    }
+
+    for (const child of children) {
+      if (child.independence) child.moves()
+      child.draw(ctx)
+    }
+
+    this.checkInRange()
+    this.animationReq = window.requestAnimationFrame(this.draw)
+  }
+
   init = () => {
     this.display.renderGame()
     this.display.renderScore()
@@ -195,15 +210,14 @@ export default class Game {
     this.display.renderWorld()
 
     window.addEventListener('mousemove', this.handleMouseMove, false)
-
     this.initEnergy()
     this.initWorld()
     this.initScore()
     this.initChain(1)
-    this.initParent(13)
-    this.initChildren(10)
+    this.initParent(30)
+    this.initChildren(17.5)
     this.initPredators(10)
     this.initWorms(5)
-    animationReq = window.requestAnimationFrame(this.draw)
+    this.animationReq = window.requestAnimationFrame(this.draw)
   }
 }

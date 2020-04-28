@@ -14,6 +14,7 @@ export default class MovingObject {
     this.currDir = [0, 0]
     this.posCache = []
 
+    this.draw = this.draw.bind(this)
     this.movesWithCursor = this.movesWithCursor.bind(this)
     this.moves = this.moves.bind(this)
     this.checkInRange = this.checkInRange.bind(this)
@@ -120,7 +121,7 @@ export default class MovingObject {
   hitsChild(obj) {}
 
   /** Draw the object on canvas */
-  draw = (ctx) => {
+  draw(ctx) {
     const { x, y } = this.pos
     ctx.beginPath()
     ctx.arc(x, y, this.radius, 0, Math.PI * 2)

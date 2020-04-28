@@ -13,6 +13,8 @@ export default class Parent extends MovingObject {
     chain,
     score,
     energy,
+    sprite,
+    size = { width: 0, height: 0 },
     color = c,
     easing = e
   ) {
@@ -24,11 +26,18 @@ export default class Parent extends MovingObject {
     this.easing = easing
     this.currPredCols = []
     this.posCache = []
+    this.sprite = sprite
+    this.size = size
 
+    this.draw = this.draw.bind(this)
     this.moves = this.moves.bind(this)
-    // this.checkInRange = this.checkInRange.bind(this)
     this.hitsPredator = this.hitsPredator.bind(this)
     this.hitsChild = this.hitsChild.bind(this)
+  }
+
+  draw(ctx) {
+    const { x, y } = this.pos
+    ctx.drawImage(this.sprite, x, y, this.size.width, this.size.height)
   }
 
   setCurrPredCols = (currPredCols) => {
@@ -98,12 +107,14 @@ export default class Parent extends MovingObject {
     this.chain.reset()
     this.energy.decrementCount()
     const children = this.children.toArray()
+
     for (const child of children) {
       child.setParent(null)
       child.setChainPos(null)
       child.setNextChild(null)
       child.setIndependence(true)
     }
+
     this.children = new LinkedList()
   }
 

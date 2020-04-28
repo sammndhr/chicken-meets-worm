@@ -10,7 +10,6 @@ export default class DOMDisplay {
 
   createElement = (tag, className, id, content) => {
     const element = document.createElement(tag)
-    if (className === 'score-label') console.log(element)
     if (className) element.classList.add(className)
     if (id) element.id = id
     if (content) element.innerText = content

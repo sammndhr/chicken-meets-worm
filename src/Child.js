@@ -5,7 +5,15 @@ const r = 10,
   v = { dx: 1, dy: 1 }
 
 export default class Child extends MovingObject {
-  constructor(pos, radius = r, world, vel = v, color = c) {
+  constructor(
+    pos,
+    radius = r,
+    world,
+    sprite,
+    size = { width: 0, height: 0 },
+    vel = v,
+    color = c
+  ) {
     super(pos, radius, world, vel, color)
     this.independence = true
     this.chainPos = null
@@ -14,6 +22,9 @@ export default class Child extends MovingObject {
     this.posCache = []
     this.moves = this.moves.bind(this)
     this.hitsPredator = this.hitsPredator.bind(this)
+    this.draw = this.draw.bind(this)
+    this.sprite = sprite
+    this.size = size
   }
 
   setParent = (parent) => {
@@ -22,7 +33,6 @@ export default class Child extends MovingObject {
 
   setChainPos = (chainPos) => {
     this.chainPos = chainPos
-    console.log()
   }
 
   setNextChild = (child) => {
@@ -35,6 +45,11 @@ export default class Child extends MovingObject {
 
   isIndependent = () => {
     return this.independence
+  }
+
+  draw(ctx) {
+    const { x, y } = this.pos
+    ctx.drawImage(this.sprite, x, y, this.size.width, this.size.height)
   }
 
   avoidPredator = () => {
