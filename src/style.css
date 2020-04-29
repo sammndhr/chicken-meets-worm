@@ -4,10 +4,27 @@
   box-sizing: border-box;
 }
 
-html {
+html,
+button {
   text-align: center;
   font-size: 1rem;
   font-family: 'Schoolbell', sans-serif;
+}
+
+button.btn {
+  padding: 1rem;
+  padding: 1rem 2rem;
+  text-align: center;
+  cursor: pointer;
+  letter-spacing: 5px;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  margin: 0 auto;
+  transition-duration: 0.4s;
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+  border-radius: 5px;
 }
 
 .game {
@@ -66,7 +83,7 @@ div.chain-wrapper {
 
 .game-over-wrapper {
   position: absolute;
-  top: 50%;
+  top: 42%;
   font-size: 32px;
   margin: 0 auto;
 }
@@ -86,4 +103,11 @@ div.chain-wrapper {
   100% {
     transform: scale(1);
   }
+}
+
+.replay-wrapper {
+  position: absolute;
+  top: 50%;
+  font-size: 32px;
+  margin: 0 auto;
 }

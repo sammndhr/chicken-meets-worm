@@ -175,10 +175,15 @@ export default class Game {
     this.energy = energy
   }
 
+  replayGame = () => {
+    location.reload()
+  }
+
   draw = (timestamp) => {
     if (this.energy.count === 0) {
       window.cancelAnimationFrame(this.animationReq)
       this.display.renderGameOverMessage()
+      this.display.renderReplayButton(this.replayGame)
       return
     }
 

@@ -114,4 +114,17 @@ export default class DOMDisplay {
     this.worldWrapper.append(wrapper)
     wrapper.append(message)
   }
+
+  renderReplayButton = (handleClickReplay) => {
+    const wrapper = this.createElement('div', 'replay-wrapper')
+
+    const button = this.createElement('button', 'btn', 'replay')
+    button.innerText = 'Replay'
+    wrapper.style.width = this.worldSize.width + 4 + 'px'
+
+    button.addEventListener('click', handleClickReplay)
+    this.worldWrapper.append(wrapper)
+
+    wrapper.append(button)
+  }
 }
