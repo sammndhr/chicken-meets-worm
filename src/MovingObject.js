@@ -25,6 +25,10 @@ export default class MovingObject {
     this.hitsChild = this.hitsChild.bind(this)
   }
 
+  setVelocity = (velocity) => {
+    this.vel = velocity
+  }
+
   setPos = (pos) => {
     this.pos = pos
   }
@@ -84,7 +88,21 @@ export default class MovingObject {
       r = this.radius
 
     let { x, y } = pos,
-      [dx, dy] = this.currDir
+      dx = this.currDir[0],
+      dy = this.currDir[1]
+
+    if (this.constructor.name === 'Child') {
+      if (this.vel.dx > 1 || this.vel.dy > 1) {
+        this.setVelocity({ dx: 1, dy: 1 })
+      }
+
+      if (dx > 1) {
+        dx = dx / 5
+      }
+      if (dy > 1) {
+        dy = dy / 5
+      }
+    }
 
     if (x + r > right || x - r < left) {
       this.setCurrDir([-dx, dy])

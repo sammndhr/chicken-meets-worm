@@ -3,7 +3,7 @@ import MovingObject from './MovingObject'
 
 const r = 13,
   c = '#7280f6',
-  e = 0.9
+  e = 1
 
 export default class Parent extends MovingObject {
   constructor(
@@ -106,6 +106,13 @@ export default class Parent extends MovingObject {
       child.setChainPos(null)
       child.setNextChild(null)
       child.setIndependence(true)
+      const vel = { dx: 3, dy: 3 }
+      child.setVelocity(vel)
+
+      const [x, y] = child.currDir,
+        { dx, dy } = vel
+      child.setCurrDir([x * dx, y * dy])
+      child.setRandomDir()
     }
 
     this.children = new LinkedList()

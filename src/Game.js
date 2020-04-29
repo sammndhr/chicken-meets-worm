@@ -198,7 +198,6 @@ export default class Game {
     this.initPredators(35)
     this.initWorms(20)
     this.animationReq = window.requestAnimationFrame(this.draw)
-    console.log(this.score.highScore)
   }
 
   gameOver = () => {
