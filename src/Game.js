@@ -214,10 +214,11 @@ export default class Game {
 
   init = () => {
     this.display.renderGame()
+    this.display.renderTitle()
+    this.display.renderWorld()
     this.display.renderScore()
     this.display.renderChain()
     this.display.renderEnergy()
-    this.display.renderWorld()
 
     window.addEventListener('mousemove', this.handleMouseMove, false)
     this.initEnergy()

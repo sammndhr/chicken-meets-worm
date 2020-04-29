@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Schoolbell&display=swap');
+
 * {
   box-sizing: border-box;
 }
@@ -5,11 +7,51 @@
 html {
   text-align: center;
   font-size: 1rem;
-  font-family: sans-serif;
+  font-family: 'Schoolbell', cursive;
 }
 
 .game {
-  margin: 4rem auto;
+  margin: 0 auto;
+}
+
+.title h1 {
+  font-size: 24px;
+  margin: 32px;
+  letter-spacing: 5px;
+}
+
+.world-wrapper {
+  margin: 0 auto;
+}
+
+.legend {
+  position: absolute;
+  top: 98px;
+  text-align: left;
+}
+
+.legend > div {
+  margin-left: 10px;
+  margin: 10px;
+}
+
+.legend-text {
+  font-size: 32px;
+  line-height: 32px;
+}
+
+div.chain-wrapper {
+  margin: 5px;
+}
+
+.chain-wrapper .image#chain-count {
+  height: 30px;
+  width: 30px;
+  margin-right: 5px;
+}
+
+.chain-wrapper .chain {
+  margin: 0 auto;
 }
 
 #world {
