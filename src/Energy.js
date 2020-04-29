@@ -11,7 +11,7 @@ export default class Energy {
   }
 
   reset = () => {
-    this.setCount(0)
+    this.setCount(this.max)
     this.updateEnergy()
   }
 

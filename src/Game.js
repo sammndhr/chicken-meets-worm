@@ -176,15 +176,45 @@ export default class Game {
   }
 
   replayGame = () => {
-    location.reload()
+    this.resetGame()
+    this.display.clearGameEnd()
+  }
+
+  resetGame = () => {
+    this.energy.reset()
+    this.score.reset()
+    this.mouse = { x: null, y: null }
+    this.parent = null
+    this.predators = new LinkedList()
+    this.children = new LinkedList()
+    this.worms = new LinkedList()
+    this.chain = null
+    this.timeSinceWorm = 0
+
+    this.initWorld()
+    this.initChain(1)
+    this.initParent(30)
+    this.initChildren(17.5)
+    this.initPredators(35)
+    this.initWorms(20)
+    this.animationReq = window.requestAnimationFrame(this.draw)
+    console.log(this.score.highScore)
+  }
+
+  gameOver = () => {
+    this.score.calculateHighScore()
+    window.cancelAnimationFrame(this.animationReq)
+    this.display.renderGameEnd(
+      this.replayGame,
+      this.score.score,
+      this.score.highScore
+    )
+    return
   }
 
   draw = (timestamp) => {
     if (this.energy.count === 0) {
-      window.cancelAnimationFrame(this.animationReq)
-      this.display.renderGameOverMessage()
-      this.display.renderReplayButton(this.replayGame)
-      return
+      return this.gameOver()
     }
 
     const timePassed = timestamp - this.timeSinceWorm

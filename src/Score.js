@@ -2,10 +2,20 @@ export default class Score {
   constructor(display) {
     this.display = display
     this.score = 0
+    this.highScore = 0
   }
 
   setScore = (score) => {
     this.score = score
+  }
+
+  setHighScore = (score) => {
+    this.highScore = score
+  }
+
+  reset = () => {
+    this.setScore(0)
+    this.updateScore()
   }
 
   calculateScore = (childCount) => {
@@ -14,6 +24,11 @@ export default class Score {
     const newScore = this.score + scoreToAdd
     this.setScore(newScore)
     this.updateScore()
+  }
+
+  calculateHighScore = () => {
+    const highScore = Math.max(this.score, this.highScore)
+    this.setHighScore(highScore)
   }
 
   updateScore = () => {

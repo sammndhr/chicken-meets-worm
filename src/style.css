@@ -19,7 +19,7 @@ button.btn {
   letter-spacing: 5px;
   font-size: 1.5rem;
   text-transform: uppercase;
-  margin: 0 auto;
+  margin: 5px auto;
   transition-duration: 0.4s;
   background-color: white;
   color: black;
@@ -81,11 +81,25 @@ div.chain-wrapper {
   animation: pulse 1s ease;
 }
 
-.game-over-wrapper {
+.end-wrapper {
   position: absolute;
-  top: 42%;
+  top: 35%;
   font-size: 32px;
   margin: 0 auto;
+}
+
+.game-end {
+  background-color: rgba(255, 255, 255, 0.5);
+  width: max-content;
+  margin: 0 auto;
+  padding: 30px 80px;
+}
+.game-end div {
+  margin-bottom: 5px;
+}
+
+.game-end > .wrapper > .score {
+  color: red;
 }
 
 @keyframes pulse {
@@ -105,9 +119,9 @@ div.chain-wrapper {
   }
 }
 
-.replay-wrapper {
+/* .replay-wrapper {
   position: absolute;
   top: 50%;
   font-size: 32px;
   margin: 0 auto;
-}
+} */
