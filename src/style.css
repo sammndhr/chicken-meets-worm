@@ -62,3 +62,10 @@ div.chain-wrapper {
 .heart-full {
   margin-right: 2px;
 }
+
+.game-over-wrapper {
+  position: absolute;
+  top: 50%;
+  font-size: 32px;
+  margin: 0 auto;
+}

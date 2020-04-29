@@ -108,7 +108,10 @@ export default class DOMDisplay {
   }
 
   renderGameOverMessage = () => {
+    const wrapper = this.createElement('div', 'game-over-wrapper')
     const message = this.createElement('div', 'game-over', null, 'Game Over!')
-    this.worldWrapper.append(message)
+    wrapper.style.width = this.worldSize.width + 4 + 'px'
+    this.worldWrapper.append(wrapper)
+    wrapper.append(message)
   }
 }
