@@ -71,7 +71,8 @@ export default class Child extends MovingObject {
   moves(pos) {
     if (this.isIndependent()) super.moves()
     else {
-      const easing = Math.max(1 - this.chainPos * 0.13, 0.1),
+      // const easing = Math.max(1 - this.chainPos * 0.13, 0.1),
+      const easing = 1,
         r = this.radius,
         offset = 2 * (r + 1) * this.chainPos + (this.parent.radius - r),
         nextChild = this.nextChild
