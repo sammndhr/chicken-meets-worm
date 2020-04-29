@@ -2,7 +2,7 @@ import MovingObject from './MovingObject'
 
 const r = 10,
   c = '#f67280',
-  v = { dx: 2, dy: 2 }
+  v = { dx: 2.2, dy: 2.2 }
 
 export default class Predator extends MovingObject {
   constructor(

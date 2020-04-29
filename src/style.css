@@ -61,6 +61,7 @@ div.chain-wrapper {
 
 .heart-full {
   margin-right: 2px;
+  animation: pulse 1s ease;
 }
 
 .game-over-wrapper {
@@ -68,4 +69,21 @@ div.chain-wrapper {
   top: 50%;
   font-size: 32px;
   margin: 0 auto;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.24);
+  }
+
+  25% {
+    transform: scale(0.5);
+  }
+
+  50% {
+    transform: scale(0.75);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
