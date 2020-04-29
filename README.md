@@ -4,12 +4,14 @@ A game made using HTML Canvas api. Move the parent chicken with mouse and get th
 
 ## Todos
 
-1. [ ] Make worms Fabulous
+1. [ ] Set number of objects based on window area
 2. [ ] Make children stick to parent onClick
 3. [ ] Tutorial
 4. [ ] Levels
-5. [ ] Set number of objects based on window area
-6. [x] Spawn more children when they get attached to Parent.
-7. [x] Style world, score, energy, chain, game-over message
-8. [x] Logo
-       ...
+5. [x] Add Replay button and persist high score on replay
+6. [x] Add high score
+7. [x] Make worms Fabulous
+8. [x] Spawn more children when they get attached to Parent.
+9. [x] Style world, score, energy, chain, game-over message
+10. [x] Logo
+        ...
