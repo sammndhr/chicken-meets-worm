@@ -23,7 +23,7 @@ const WormSprite = new Image()
 WormSprite.src = wormImage
 
 export default class Game {
-  constructor(display, childCount = 10, predatorCount = 4, wormCount = 1) {
+  constructor(display, childCount = 5, predatorCount = 4, wormCount = 1) {
     this.display = display
     this.mouse = { x: null, y: null }
     this.world = null
@@ -62,7 +62,10 @@ export default class Game {
 
     // Child predator collisions
     for (const child of children) {
-      if (parent.checkInRange(child)) parent.hitsChild(child)
+      if (parent.checkInRange(child)) {
+        parent.hitsChild(child)
+        this.spawnChildren(17.5)
+      }
       for (const predator of predators) {
         if (child.checkInRange(predator, 10)) child.avoidPredator()
         if (child.checkInRange(predator, 0)) child.hitsPredator(this)
@@ -82,12 +85,15 @@ export default class Game {
 
   spawnChildren = (r) => {
     const size = { width: r * 2, height: r * 2 }
-    while (this.children.size < this.childCount) {
+    let independentC = this.children.size - this.parent.getChildCount()
+
+    while (independentC < this.childCount && this.childCount > 0) {
       const randomPos = this.world.getRandomPos(r),
         child = new Child(randomPos, r, this.world, ChildSprite, size)
 
       child.setRandomDir()
       this.children.appendToTail(child)
+      independentC = this.children.size - this.parent.getChildCount()
     }
   }
 

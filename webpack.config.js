@@ -11,8 +11,8 @@ module.exports = {
     new CleanWebpackPlugin(),
     // Will create index.html and put it in dist.
     new HtmlWebpackPlugin({
-      title: 'Wings Over Water',
-      favicon: './public/favicon.ico',
+      title: 'Chicken Meets Worm',
+      favicon: './public/favicon.png',
     }),
   ],
   output: {
