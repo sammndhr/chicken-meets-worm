@@ -3,6 +3,7 @@
  */
 
 import childCountImg from './imgs/count.png'
+import heart from './imgs/heart.svg'
 
 export default class DOMDisplay {
   constructor({ width = 400, height = 700 }) {
@@ -67,13 +68,13 @@ export default class DOMDisplay {
   }
 
   renderEnergy = () => {
-    const energyWrapper = this.createElement('div', 'energy-wrapper'),
-      energyLabel = this.createElement('span', 'label', null, 'energy: '),
-      energy = this.createElement('span', 'energy', 'energy')
-
-    this.legend.append(energyWrapper)
-    energyWrapper.append(energyLabel)
-    energyWrapper.append(energy)
+    const energyWrapper = this.createElement(
+      'div',
+      'energy-wrapper',
+      'energy-wrapper'
+    )
+    this.legend.appendChild(energyWrapper)
+    this.updateEnergyBar(5)
   }
 
   renderChain = () => {
@@ -86,9 +87,23 @@ export default class DOMDisplay {
     chainWrapper.append(chain)
   }
 
+  updateEnergyBar(count) {
+    var eW = this.getElement('#energy-wrapper')
+    if (eW.childElementCount > count) {
+      while (eW.childElementCount > count) {
+        eW.removeChild(this.getElement('.heart-full'))
+      }
+    } else {
+      let i = Math.min(count, 5)
+      while (eW.childElementCount < i) {
+        const heartFull = this.createImage(heart, 'heart-full')
+        eW.append(heartFull)
+      }
+    }
+  }
+
   renderScore = () => {
     const score = this.createElement('div', 'legend-text', 'score')
-
     this.legend.append(score)
   }
 

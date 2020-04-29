@@ -28,7 +28,7 @@ export default class Energy {
   }
 
   updateEnergy = () => {
-    this.display.updateElement('#energy', this.count)
+    this.display.updateEnergyBar(this.count)
   }
 
   init = () => {
