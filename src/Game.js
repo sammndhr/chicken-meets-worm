@@ -51,6 +51,7 @@ export default class Game {
     const mouse = { x: e.clientX, y: e.clientY }
     this.mouse = mouse
     this.clicking = true
+    this.energy.decrementCountByHalf()
   }
 
   handleMouseUp = () => {

@@ -76,9 +76,14 @@ div.chain-wrapper {
   background-color: rgb(194, 255, 194);
 }
 
-.heart-full {
-  margin-right: 2px;
-  animation: pulse 1s ease;
+.heart-left {
+  margin-right: -1px;
+  /* animation: pulse 1s ease; */
+}
+
+.heart-right {
+  /* animation: pulse 1s ease; */
+  margin-right: 3px;
 }
 
 .end-wrapper {

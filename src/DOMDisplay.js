@@ -3,7 +3,8 @@
  */
 
 import childCountImg from './imgs/count.png'
-import heart from './imgs/heart.svg'
+import heartLeft from './imgs/heart-left.svg'
+import heartRight from './imgs/heart-right.svg'
 
 export default class DOMDisplay {
   constructor({ width = 400, height = 700 }) {
@@ -94,16 +95,33 @@ export default class DOMDisplay {
   }
 
   updateEnergyBar(count) {
-    var eW = this.getElement('#energy-wrapper')
-    if (eW.childElementCount > count) {
-      while (eW.childElementCount > count) {
-        eW.removeChild(this.getElement('.heart-full'))
+    const eW = this.getElement('#energy-wrapper'),
+      i = Math.min(count, 5) * 2
+
+    if (eW.childElementCount > i) {
+      while (eW.childElementCount > i) {
+        if (eW.childElementCount === 0) return
+        eW.removeChild(eW.lastChild)
       }
-    } else {
-      let i = Math.min(count, 5)
-      while (eW.childElementCount < i) {
-        const heartFull = this.createImage(heart, 'heart-full')
-        eW.append(heartFull)
+    } else if (eW.childElementCount < i) {
+      let left = true
+      let heartCount = eW.childElementCount
+      if (heartCount % 2 !== 0) {
+        eW.append(this.createImage(heartRight, 'heart-right'))
+        heartCount++
+      }
+
+      while (heartCount < i) {
+        const heartL = this.createImage(heartLeft, 'heart-left')
+        const heartR = this.createImage(heartRight, 'heart-right')
+        if (left) {
+          eW.append(heartL)
+          left = false
+        } else if (!left) {
+          eW.append(heartR)
+          left = true
+        }
+        heartCount++
       }
     }
   }

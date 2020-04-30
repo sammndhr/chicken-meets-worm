@@ -27,6 +27,12 @@ export default class Energy {
     this.updateEnergy()
   }
 
+  decrementCountByHalf = () => {
+    const count = this.count
+    this.count = Math.max(count - 0.5, this.min)
+    this.updateEnergy()
+  }
+
   updateEnergy = () => {
     this.display.updateEnergyBar(this.count)
   }
