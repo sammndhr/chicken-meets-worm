@@ -86,6 +86,10 @@ div.chain-wrapper {
   margin-right: 3px;
 }
 
+.animate {
+  animation: pulse 2s ease;
+}
+
 .end-wrapper {
   position: absolute;
   top: 35%;
@@ -109,24 +113,14 @@ div.chain-wrapper {
 
 @keyframes pulse {
   0% {
-    transform: scale(0.24);
-  }
-
-  25% {
-    transform: scale(0.5);
+    transform: scale(1);
   }
 
   50% {
-    transform: scale(0.75);
+    transform: scale(2);
   }
+
   100% {
     transform: scale(1);
   }
 }
-
-/* .replay-wrapper {
-  position: absolute;
-  top: 50%;
-  font-size: 32px;
-  margin: 0 auto;
-} */
