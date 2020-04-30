@@ -1,9 +1,8 @@
 export default class Chain {
-  constructor(display, count = 1, max = 10) {
+  constructor(display, count = 0) {
     this.display = display
     this.count = count
     this.min = 0
-    this.max = max
   }
 
   setCount = (count) => {
@@ -11,12 +10,12 @@ export default class Chain {
   }
 
   reset = () => {
-    this.setCount(1)
+    this.setCount(0)
     this.updateChain()
   }
 
   incrementCount = () => {
-    const count = Math.min(this.count + 1, this.max)
+    const count = this.count + 1
     this.setCount(count)
     this.updateChain()
   }

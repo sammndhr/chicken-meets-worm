@@ -151,8 +151,8 @@ export default class Game {
     this.spawnWorms(radius)
   }
 
-  initChain = (count) => {
-    const chain = new Chain(this.display, count)
+  initChain = () => {
+    const chain = new Chain(this.display)
     chain.init()
     this.chain = chain
   }
@@ -264,7 +264,7 @@ export default class Game {
     this.initEnergy()
     this.initWorld()
     this.initScore()
-    this.initChain(1)
+    this.initChain()
     this.initParent(30)
     this.initChildren(17.5)
     this.initPredators(35)
