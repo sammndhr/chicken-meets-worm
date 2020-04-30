@@ -31,6 +31,7 @@ export default class Parent extends MovingObject {
     this.moves = this.moves.bind(this)
     this.hitsPredator = this.hitsPredator.bind(this)
     this.hitsChild = this.hitsChild.bind(this)
+    this.clicking = false
   }
 
   setCurrPredCols = (currPredCols) => {

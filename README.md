@@ -16,9 +16,9 @@ chicken-meets-worm$ npm run start
 ## Todos
 
 1. [ ] Set number of objects based on window area
-2. [ ] Make children stick to parent onClick
-3. [ ] Tutorial
-4. [ ] Levels
+2. [ ] Tutorial
+3. [ ] Levels
+4. [x] ~~Make children stick to parent onClick.~~ Done. YAY :D
 5. [x] Fix bug: Chain count stuck at max 10
 6. [x] Add Replay button and persist high score on replay
 7. [x] Add high score

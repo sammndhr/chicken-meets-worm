@@ -24,6 +24,11 @@ export default class Child extends MovingObject {
     this.hitsPredator = this.hitsPredator.bind(this)
     this.sprite = sprite
     this.size = size
+    this.clicking = false
+  }
+
+  setClicking = (clicking) => {
+    this.clicking = clicking
   }
 
   setParent = (parent) => {
@@ -71,11 +76,15 @@ export default class Child extends MovingObject {
   moves(pos) {
     if (this.isIndependent()) super.moves()
     else {
+      // Removed easing for now. Maybe add for higher levels. Children take too long long to move.
       // const easing = Math.max(1 - this.chainPos * 0.13, 0.1),
       const easing = 1,
         r = this.radius,
-        offset = 2 * (r + 1) * this.chainPos + (this.parent.radius - r),
         nextChild = this.nextChild
+
+      let offset
+      if (this.clicking) offset = 0
+      else offset = 2 * (r + 1) * this.chainPos + (this.parent.radius - r)
 
       super.movesWithCursor(pos, easing, offset)
 

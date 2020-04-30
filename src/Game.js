@@ -39,10 +39,22 @@ export default class Game {
     this.score = null
     this.timeSinceWorm = 0
     this.animationReq = null
+    this.clicking = false
   }
 
   handleMouseMove = (e) => {
+    if (this.clicking) return
     this.mouse = { x: e.clientX, y: e.clientY }
+  }
+
+  handleMouseDown = (e) => {
+    const mouse = { x: e.clientX, y: e.clientY }
+    this.mouse = mouse
+    this.clicking = true
+  }
+
+  handleMouseUp = () => {
+    this.clicking = false
   }
 
   destroyWorm = (worm) => {
@@ -246,6 +258,8 @@ export default class Game {
     for (const child of children) {
       if (child.independence) child.moves()
       child.draw(ctx, { x: 15, y: 15 })
+
+      this.clicking ? child.setClicking(true) : child.setClicking(false)
     }
 
     this.checkInRange()
@@ -261,6 +275,8 @@ export default class Game {
     this.display.renderEnergy()
 
     window.addEventListener('mousemove', this.handleMouseMove, false)
+    window.addEventListener('mousedown', this.handleMouseDown, false)
+    window.addEventListener('mouseup', this.handleMouseUp, false)
     this.initEnergy()
     this.initWorld()
     this.initScore()
