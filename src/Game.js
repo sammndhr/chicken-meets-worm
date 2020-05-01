@@ -56,7 +56,7 @@ export default class Game {
     const mouse = { x: e.clientX, y: e.clientY }
     this.mouse = mouse
     this.clicking = true
-    this.energy.decrementCountByHalf()
+    if (this.parent.getChildCount() > 0) this.energy.decrementCountByHalf()
   }
 
   handleMouseUp = () => {
@@ -137,12 +137,12 @@ export default class Game {
     }
   }
 
-  initChildren = (radius) => {
-    this.spawnChildren(radius)
+  initChildren = (r) => {
+    this.spawnChildren(r)
   }
 
-  initPredators = (radius) => {
-    this.spawnPredators(radius)
+  initPredators = (r) => {
+    this.spawnPredators(r)
   }
 
   initParent = (r) => {
@@ -165,8 +165,8 @@ export default class Game {
     this.parent = parent
   }
 
-  initWorms = (radius) => {
-    this.spawnWorms(radius)
+  initWorms = (r) => {
+    this.spawnWorms(r)
   }
 
   initChain = () => {
