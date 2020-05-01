@@ -13,6 +13,7 @@ export default class DOMDisplay {
     this.worldWrapper = null
     this.gameEnd = null
     this.legend = null
+    console.log(width, height)
   }
 
   createImage = (src, className, id) => {
@@ -149,6 +150,8 @@ export default class DOMDisplay {
     this.gameEndWrapper = gameEndWrapper
     this.worldWrapper.append(gameEndWrapper)
     gameEndWrapper.append(gameEnd)
+
+    gameEndWrapper.style.top = 98 + this.worldSize.height / 4 + 'px'
     this.renderGameOverMessage()
     this.renderEndScore(score, highScore)
     this.renderReplayButton(handleClickReplay)
