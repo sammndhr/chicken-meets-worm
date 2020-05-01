@@ -3,8 +3,8 @@
  */
 
 import childCountImg from './imgs/count.png'
-import heartLeft from './imgs/heart-left.svg'
-import heartRight from './imgs/heart-right.svg'
+import wormLeft from './imgs/worm-left.png'
+import wormRight from './imgs/worm-right.png'
 
 export default class DOMDisplay {
   constructor({ width = 400, height = 700 }) {
@@ -21,6 +21,16 @@ export default class DOMDisplay {
     if (className) img.classList.add(className)
     if (id) img.id = id
     return img
+  }
+
+  removeHealthAnimation = () => {
+    const wormL = document.getElementsByClassName('worm-left')[0]
+    if (wormL) wormL.classList.remove('animate')
+  }
+
+  animateHealth = () => {
+    const wormL = document.getElementsByClassName('worm-left')[0]
+    if (wormL) wormL.classList.add('animate')
   }
 
   createElement = (tag, className, id, content) => {
@@ -105,23 +115,23 @@ export default class DOMDisplay {
       }
     } else if (eW.childElementCount < i) {
       let left = true
-      let heartCount = eW.childElementCount
-      if (heartCount % 2 !== 0) {
-        eW.append(this.createImage(heartRight, 'heart-right'))
-        heartCount++
+      let wormCount = eW.childElementCount
+      if (wormCount % 2 !== 0) {
+        eW.append(this.createImage(wormRight, 'worm-right'))
+        wormCount++
       }
 
-      while (heartCount < i) {
-        const heartL = this.createImage(heartLeft, 'heart-left')
-        const heartR = this.createImage(heartRight, 'heart-right')
+      while (wormCount < i) {
+        const wormL = this.createImage(wormLeft, 'worm-left')
+        const wormR = this.createImage(wormRight, 'worm-right')
         if (left) {
-          eW.append(heartL)
+          eW.append(wormL)
           left = false
         } else if (!left) {
-          eW.append(heartR)
+          eW.append(wormR)
           left = true
         }
-        heartCount++
+        wormCount++
       }
     }
   }

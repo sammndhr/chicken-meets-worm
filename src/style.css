@@ -76,14 +76,12 @@ div.chain-wrapper {
   background-color: rgb(194, 255, 194);
 }
 
-.heart-left {
-  margin-right: -1px;
-  /* animation: pulse 1s ease; */
+.worm-left {
+  width: 20px;
 }
 
-.heart-right {
-  /* animation: pulse 1s ease; */
-  margin-right: 3px;
+.worm-right {
+  width: 20px;
 }
 
 .animate {

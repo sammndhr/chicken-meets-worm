@@ -45,12 +45,12 @@ export default class Game {
   handleMouseMove = (e) => {
     if (this.clicking) return
     this.mouse = { x: e.clientX, y: e.clientY }
-    document.getElementsByClassName('heart-left')[0].classList.remove('animate')
+    this.display.removeHealthAnimation()
   }
 
   handleMouseDown = (e) => {
     if (this.energy.count <= 0.5) {
-      document.getElementsByClassName('heart-left')[0].classList.add('animate')
+      this.display.animateHealth()
       return
     }
     const mouse = { x: e.clientX, y: e.clientY }
