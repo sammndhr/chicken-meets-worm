@@ -2,9 +2,9 @@
  * Related to the DOM and display (creating elements, updating elements etc.)
  */
 
-import childCountImg from './imgs/count.png'
-import wormLeft from './imgs/worm-left.png'
-import wormRight from './imgs/worm-right.png'
+import childCountImg from '../imgs/count.png'
+import wormLeft from '../imgs/worm-left.png'
+import wormRight from '../imgs/worm-right.png'
 
 export default class DOMDisplay {
   constructor({ width = 400, height = 700 }) {
@@ -13,7 +13,6 @@ export default class DOMDisplay {
     this.worldWrapper = null
     this.gameEnd = null
     this.legend = null
-    console.log(width, height)
   }
 
   createImage = (src, className, id) => {

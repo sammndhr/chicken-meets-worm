@@ -9,7 +9,6 @@ import wormImage from './imgs/worm.png'
 import Parent from './Parent.js'
 import Predator from './Predator.js'
 import Score from './Score.js'
-import './style.css'
 import World from './World.js'
 import Worm from './Worm.js'
 
@@ -40,6 +39,7 @@ export default class Game {
     this.timeSinceWorm = 0
     this.animationReq = null
     this.clicking = false
+    this.init = this.init.bind(this)
   }
 
   handleMouseMove = (e) => {
@@ -272,10 +272,10 @@ export default class Game {
     this.animationReq = window.requestAnimationFrame(this.draw)
   }
 
-  init = () => {
-    this.display.renderGame()
-    this.display.renderTitle()
-    this.display.renderWorld()
+  init() {
+    // this.display.renderGame()
+    // this.display.renderTitle()
+    // this.display.renderWorld()
     this.display.renderScore()
     this.display.renderChain()
     this.display.renderEnergy()
