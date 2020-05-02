@@ -4,7 +4,7 @@ const r = 10,
   c = '#936344',
   v = { dx: 2, dy: 2 }
 
-export default class Child extends MovingObject {
+export default class Worm extends MovingObject {
   constructor(
     pos,
     radius = r,
@@ -18,6 +18,7 @@ export default class Child extends MovingObject {
     this.sprite = sprite
     this.size = size
     this.moves = this.moves.bind(this)
+    // console.log(vel)
   }
 
   moves(game) {
@@ -27,7 +28,6 @@ export default class Child extends MovingObject {
     if (this.checkOutOfBounds(pos)) {
       game.destroyWorm(this)
     }
-
     this.setPos(pos)
   }
 }

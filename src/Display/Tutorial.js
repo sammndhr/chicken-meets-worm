@@ -6,22 +6,22 @@ export default class Tutorial extends DOMDisplay {
     this.game = game
     this.world = world
     this.worldWrapper = worldWrapper
-    this.introWrapper = null
     this.legend = legend
-    this.tutorialMsgWrapper = null
-    this.settimeout = null
+    this.settimeout = []
   }
 
-  changeMessage = (message, time) => {
-    this.settimeout = setTimeout(() => {
-      this.updateElement('#tut-msg-0', message)
-    }, time)
+  changeMessage = (selector, message, time) => {
+    this.settimeout.push(
+      setTimeout(() => {
+        this.updateElement(selector, message)
+      }, time)
+    )
   }
 
   renderMoveParentTut = () => {
     const legend = this.legend
     if (legend) legend.style.display = 'none'
-    this.tutorialMsgWrapper = this.createElement('div', 'tutorial-wrapper')
+    const tutorialMsgWrapper = this.createElement('div', 'tutorial-wrapper')
     const message1 = this.createElement(
       'div',
       'tutorial-message',
@@ -31,20 +31,28 @@ export default class Tutorial extends DOMDisplay {
     const message2 = this.createElement(
       'div',
       'tutorial-msg-keypress',
-      'tut-msg-1',
-      'Hit enter to continue and space to skip tutorial.'
+      'tut-msg-1'
     )
-    this.worldWrapper.append(this.tutorialMsgWrapper)
+    this.worldWrapper.append(tutorialMsgWrapper)
     this.worldWrapper.append(message2)
-    this.tutorialMsgWrapper.style.width = this.worldSize.width + 4 + 'px'
-    this.tutorialMsgWrapper.style.top = '120px'
+    tutorialMsgWrapper.style.width = this.worldSize.width + 4 + 'px'
+    tutorialMsgWrapper.style.top = '120px'
 
     message2.style.width = this.worldSize.width + 4 + 'px'
     message2.style.top = 65 + this.worldSize.height + 'px'
-    this.tutorialMsgWrapper.append(message1)
+    tutorialMsgWrapper.append(message1)
+    this.changeMessage(
+      '#tut-msg-1',
+      'Press SPACE to continue and ENTER to skip tutorial.',
+      2500
+    )
   }
 
   renderChildrenTut = () => {
+    while (this.settimeout.length) {
+      clearTimeout(this.settimeout.pop())
+    }
+    this.clearElement('#tut-msg-1')
     if (this.legend) this.legend.style.display = 'block'
 
     this.updateElement(
@@ -52,42 +60,78 @@ export default class Tutorial extends DOMDisplay {
       'Hover over the baby chicks to make them stick close to you.'
     )
     this.changeMessage(
+      '#tut-msg-0',
       'The longer your chain, the higher your score increments.',
-      3800
+      3500
+    )
+    this.changeMessage(
+      '#tut-msg-1',
+      'Press SPACE to continue and ENTER to skip tutorial.',
+      6000
     )
   }
 
   renderPredatorTut = () => {
-    clearTimeout(this.settimeout)
-    const energyWrapper = this.getElement('#energy-wrapper')
-    // if (energyWrapper) energyWrapper.style.display = 'none'
+    while (this.settimeout.length) {
+      clearTimeout(this.settimeout.pop())
+    }
+    this.clearElement('#tut-msg-1')
+
     this.updateElement(
       '#tut-msg-0',
       "Watch out for predators. Nyan-chan didn't get fat eating grass."
     )
     this.changeMessage(
+      '#tut-msg-0',
       "The worms show your health. Every encounter with a cat costs you 1 worm. The game ends when you're out of worms.",
       4000
+    )
+    this.changeMessage(
+      '#tut-msg-1',
+      'Press SPACE to continue and ENTER to skip tutorial.',
+      7000
     )
   }
 
   renderClickParentTut = () => {
-    clearTimeout(this.settimeout)
+    while (this.settimeout.length) {
+      clearTimeout(this.settimeout.pop())
+    }
+    this.clearElement('#tut-msg-1')
     this.updateElement(
       '#tut-msg-0',
       'CLICK to gather all your children in one place for the cheap price of half a worm.'
     )
     this.changeMessage(
-      "Do this sparingly, cause you wont't be able to move while clicking!",
-      5000
+      '#tut-msg-0',
+      "Do this sparingly, cause you won't be able to move while clicking! And you can't use it if you don't have enough worms.",
+      3500
+    )
+    this.changeMessage(
+      '#tut-msg-1',
+      'Press SPACE to continue and ENTER to skip tutorial.',
+      6500
     )
   }
 
   renderWormTut = () => {
-    clearTimeout(this.settimeout)
+    while (this.settimeout.length) {
+      clearTimeout(this.settimeout.pop())
+    }
+    this.clearElement('#tut-msg-1')
     this.updateElement(
       '#tut-msg-0',
-      'Replenish your energy by feasting on delicious worms. You can have some extra for the tutorial.'
+      'Replenish your energy by feasting on delicious worms.'
+    )
+    this.changeMessage(
+      '#tut-msg-0',
+      'You can have some extra for the tutorial.',
+      3500
+    )
+    this.changeMessage(
+      '#tut-msg-0',
+      "Congratulations you're no longer a noob! Press ENTER to start!",
+      6000
     )
   }
 }

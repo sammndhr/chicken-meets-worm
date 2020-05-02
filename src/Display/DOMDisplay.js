@@ -58,6 +58,10 @@ export default class DOMDisplay {
     this.getElement(selector).innerText = val
   }
 
+  clearElement = (selector) => {
+    this.getElement(selector).innerText = ''
+  }
+
   renderGame = () => {
     const game = this.createElement('div', 'game', 'game')
     this.game = game

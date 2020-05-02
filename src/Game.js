@@ -129,11 +129,11 @@ export default class Game {
   }
 
   spawnWorms = (r, vel) => {
+    if (!vel) vel = { dx: 2, dy: 2 }
     const size = { width: r * 2, height: r * 2 }
-
     while (this.worms.size < this.wormCount) {
       const randomPos = this.world.getRandomPos(r),
-        worm = new Worm(randomPos, r, this.world, WormSprite, size, vel && vel)
+        worm = new Worm(randomPos, r, this.world, WormSprite, size, vel)
       worm.setRandomDir()
       this.worms.appendToTail(worm)
     }

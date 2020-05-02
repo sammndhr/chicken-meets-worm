@@ -57,7 +57,9 @@ export default class MovingObject {
     ↙      ↘
     */
 
-    const { dx, dy } = this.vel
+    let { dx, dy } = this.vel
+    dx = dx ? dx : 1
+    dy = dy ? dy : 1
     const index = getRandomInt(8)
     const possibleDirections = [
       // 0 values off slightly so objects doesn't stick to edges.

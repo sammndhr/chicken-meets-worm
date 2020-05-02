@@ -5,13 +5,13 @@ export default class TutorialGame extends Game {
     this.tutorialNo = 0
     this.destroyChild = this.destroyChild.bind(this)
   }
+
   checkInRange() {
     const parent = this.parent,
       children = this.children.toArray(),
       predators = this.predators.toArray(),
       worms = this.worms.toArray()
 
-    // Child predator collisions
     for (const child of children) {
       if (parent.checkInRange(child)) {
         parent.hitsChild(child)
@@ -22,13 +22,12 @@ export default class TutorialGame extends Game {
         if (child.checkInRange(predator, 0)) child.hitsPredator(this)
       }
     }
-    // Parent predator collisions
+
     for (const predator of predators) {
       if (parent.checkInRange(predator, 5))
         parent.checkCollisionWithPredator(predator)
     }
 
-    //Parent worm collisions
     for (const worm of worms) {
       if (parent.checkInRange(worm, 2)) parent.hitsWorm(this, worm)
     }
@@ -70,8 +69,10 @@ export default class TutorialGame extends Game {
     }
     if (this.tutorialNo >= 4) {
       const timePassed = timestamp - this.timeSinceWorm
-      if (timePassed >= 10 && this.worms.size < this.wormCount) {
-        this.spawnWorms(20, { dy: 0.5, dy: 0.5 })
+      if (timePassed >= 5) {
+        while (this.worms.size < this.wormCount) {
+          this.spawnWorms(20, { dx: 0.5, dy: 0.5 })
+        }
         this.timeSinceWorm = timestamp
       }
 
@@ -81,8 +82,8 @@ export default class TutorialGame extends Game {
         worm.draw(ctx, { x: 0, y: 0 })
       }
     }
-    this.checkInRange()
 
+    this.checkInRange()
     this.animationReq = window.requestAnimationFrame(this.drawTutorial)
   }
 
@@ -151,6 +152,8 @@ export default class TutorialGame extends Game {
     const pred = this.predators.toArray()[0]
 
     this.animationReq = window.requestAnimationFrame(this.drawTutorial)
+    window.addEventListener('mouseup', this.handleMouseUp, false)
+    window.addEventListener('mousedown', this.handleMouseDown, false)
 
     pred.setPos({ x: 35, y: 35 })
     pred.setCurrDir([0.23, -1])
@@ -194,8 +197,8 @@ export default class TutorialGame extends Game {
   }
 
   handlePressSpace = (e) => {
-    if (e.keyCode === 32) console.log('game start')
-    if (e.keyCode !== 13) return
+    if (e.keyCode === 13) console.log('game start')
+    if (e.keyCode !== 32) return
     if (this.tutorialNo === 0) {
       this.initTutorial1()
     } else if (this.tutorialNo === 1) {
