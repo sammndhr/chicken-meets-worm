@@ -40,17 +40,19 @@ export default class Game {
     this.animationReq = null
     this.clicking = false
     this.init = this.init.bind(this)
+    this.checkInRange = this.checkInRange.bind(this)
+    this.destroyChild = this.destroyChild.bind(this)
   }
 
   handleMouseMove = (e) => {
     if (this.clicking) return
     this.mouse = { x: e.clientX, y: e.clientY }
-    this.display.removeHealthAnimation()
+    this.display.removeAnimation('worm-left')
   }
 
   handleMouseDown = (e) => {
     if (this.energy.count <= 0.5) {
-      this.display.animateHealth()
+      this.display.animate('worm-left')
       return
     }
     const mouse = { x: e.clientX, y: e.clientY }
@@ -67,12 +69,12 @@ export default class Game {
     this.worms.deleteNode(worm)
   }
 
-  destroyChild = (child) => {
+  destroyChild(child) {
     this.children.deleteNode(child)
     this.spawnChildren(17.5)
   }
 
-  checkInRange = () => {
+  checkInRange() {
     const parent = this.parent,
       children = this.children.toArray(),
       predators = this.predators.toArray(),
@@ -126,12 +128,12 @@ export default class Game {
     }
   }
 
-  spawnWorms = (r) => {
+  spawnWorms = (r, vel) => {
     const size = { width: r * 2, height: r * 2 }
 
     while (this.worms.size < this.wormCount) {
       const randomPos = this.world.getRandomPos(r),
-        worm = new Worm(randomPos, r, this.world, WormSprite, size)
+        worm = new Worm(randomPos, r, this.world, WormSprite, size, vel && vel)
       worm.setRandomDir()
       this.worms.appendToTail(worm)
     }
@@ -165,8 +167,8 @@ export default class Game {
     this.parent = parent
   }
 
-  initWorms = (r) => {
-    this.spawnWorms(r)
+  initWorms = (r, vel) => {
+    this.spawnWorms(r, vel)
   }
 
   initChain = () => {
@@ -187,8 +189,8 @@ export default class Game {
     this.score = score
   }
 
-  initEnergy = () => {
-    const energy = new Energy(this.display)
+  initEnergy = (initCount, max) => {
+    const energy = new Energy(this.display, initCount, max)
     energy.init()
     this.energy = energy
   }
@@ -210,7 +212,7 @@ export default class Game {
     this.timeSinceWorm = 0
 
     this.initWorld()
-    this.initChain(1)
+    this.initChain()
     this.initParent(30)
     this.initChildren(17.5)
     this.initPredators(35)
@@ -283,7 +285,7 @@ export default class Game {
     window.addEventListener('mousemove', this.handleMouseMove, false)
     window.addEventListener('mousedown', this.handleMouseDown, false)
     window.addEventListener('mouseup', this.handleMouseUp, false)
-    this.initEnergy()
+    this.initEnergy(5, 5)
     this.initWorld()
     this.initScore()
     this.initChain()

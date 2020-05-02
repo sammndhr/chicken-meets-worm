@@ -42,6 +42,12 @@ export default class Parent extends MovingObject {
     return this.children.size
   }
 
+  deleteAllChildren = () => {
+    while (this.getChildCount() > 1) {
+      this.deleteLastChild()
+    }
+  }
+
   deleteLastChild = () => {
     let curr = this.children.deleteFromTail()
     if (curr) {

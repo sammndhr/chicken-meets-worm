@@ -1,7 +1,9 @@
 import DOMDisplay from './Display/DOMDisplay.js'
 import Intro from './Display/Intro.js'
+import Tutorial from './Display/Tutorial.js'
 import Game from './Game'
 import './style.css'
+import TutorialGame from './TutorialGame'
 
 const width = Math.min(window.innerWidth / 1.2, 1200),
   height = Math.min(window.innerHeight / 1.2, 750),
@@ -18,15 +20,26 @@ const introDisplay = new Intro(
   display.worldSize
 )
 
-function handleClick() {
-  console.log('clicked tutorial')
+const tutorialDisplay = new Tutorial(
+  display.game,
+  display.world,
+  display.worldWrapper,
+  display.worldSize,
+  display.legend
+)
+
+function handleClickTutorial() {
+  const tutorialGame = new TutorialGame(tutorialDisplay)
+  introDisplay.clearIntro()
+
+  tutorialGame.initTutorial()
 }
 
 function handleClickStart() {
-  introDisplay.clearTutorial()
+  introDisplay.clearIntro()
   game.init()
 }
 
 introDisplay.renderIntro()
-introDisplay.renderTutorialButton(handleClick)
+introDisplay.renderTutorialButton(handleClickTutorial)
 introDisplay.renderStartLink(handleClickStart)

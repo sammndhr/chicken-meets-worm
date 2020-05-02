@@ -13,6 +13,10 @@ export default class DOMDisplay {
     this.worldWrapper = null
     this.gameEnd = null
     this.legend = null
+    this.world = null
+    this.renderChain = this.renderChain.bind(this)
+    this.renderEnergy = this.renderEnergy.bind(this)
+    this.renderScore = this.renderScore.bind(this)
   }
 
   createImage = (src, className, id) => {
@@ -23,14 +27,14 @@ export default class DOMDisplay {
     return img
   }
 
-  removeHealthAnimation = () => {
-    const wormL = document.getElementsByClassName('worm-left')[0]
-    if (wormL) wormL.classList.remove('animate')
+  removeAnimation = (wormClass) => {
+    const worm = document.getElementsByClassName(wormClass)[0]
+    if (worm) worm.classList.remove('animate')
   }
 
-  animateHealth = () => {
-    const wormL = document.getElementsByClassName('worm-left')[0]
-    if (wormL) wormL.classList.add('animate')
+  animate = (wormClass) => {
+    const worm = document.getElementsByClassName(wormClass)[0]
+    if (worm) worm.classList.add('animate')
   }
 
   createElement = (tag, className, id, content) => {
@@ -70,7 +74,7 @@ export default class DOMDisplay {
   renderWorld = () => {
     const worldWrapper = this.createElement('div', 'world-wrapper'),
       world = this.createElement('canvas', null, 'world'),
-      legend = this.createElement('div', 'legend'),
+      legend = this.createElement('div', 'legend', 'legend'),
       { width, height } = this.worldSize
     world.width = this.worldSize.width
     world.height = this.worldSize.height
@@ -84,7 +88,7 @@ export default class DOMDisplay {
     this.world = world
   }
 
-  renderEnergy = () => {
+  renderEnergy() {
     const energyWrapper = this.createElement(
       'div',
       'energy-wrapper',
@@ -94,7 +98,7 @@ export default class DOMDisplay {
     this.updateEnergyBar(5)
   }
 
-  renderChain = () => {
+  renderChain() {
     const chainWrapper = this.createElement('div', 'chain-wrapper')
     const countImg = this.createImage(childCountImg, 'image', 'chain-count')
     const chain = this.createElement('span', 'legend-text', 'chain')
@@ -136,7 +140,7 @@ export default class DOMDisplay {
     }
   }
 
-  renderScore = () => {
+  renderScore() {
     const score = this.createElement('div', ['legend-text', 'score'], 'score')
     this.legend.append(score)
   }
@@ -157,7 +161,9 @@ export default class DOMDisplay {
   }
 
   clearGameEnd = () => {
-    this.worldWrapper.removeChild(this.gameEndWrapper)
+    const gameEnd = this.getElement('.end-wrapper'),
+      worldWrapper = this.getElement('.world-wrapper')
+    if (gameEnd) worldWrapper.removeChild(gameEnd)
   }
 
   renderGameOverMessage = () => {

@@ -153,3 +153,16 @@ div.chain-wrapper {
     transform: scale(1);
   }
 }
+
+.tutorial-wrapper {
+  position: absolute;
+}
+
+.tutorial-message {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.tutorial-msg-keypress {
+  position: absolute;
+}

@@ -6,7 +6,6 @@ export default class Intro extends DOMDisplay {
     super(worldSize)
     this.game = game
     this.worldWrapper = worldWrapper
-
     this.introWrapper = null
   }
 
@@ -44,7 +43,7 @@ export default class Intro extends DOMDisplay {
     this.introWrapper = introWrapper
   }
 
-  clearTutorial = () => {
+  clearIntro = () => {
     this.worldWrapper.removeChild(this.introWrapper)
   }
 }
