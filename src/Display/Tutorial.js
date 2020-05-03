@@ -37,12 +37,12 @@ export default class Tutorial extends DOMDisplay {
       worldWrapper = this.getElement('#world-wrapper')
 
     worldWrapper.append(tutorialMsgWrapper)
-    worldWrapper.append(message2)
     tutorialMsgWrapper.style.width = this.worldSize.width + 4 + 'px'
-    tutorialMsgWrapper.style.top = '120px'
+    tutorialMsgWrapper.style.height = this.worldSize.height + 4 + 'px'
     message2.style.width = this.worldSize.width + 4 + 'px'
-    message2.style.top = 65 + this.worldSize.height + 'px'
+    message2.style.top = this.worldSize.height - 36 + 'px'
     tutorialMsgWrapper.append(message1)
+    tutorialMsgWrapper.append(message2)
 
     this.changeMessage(
       '#tut-msg-1',
@@ -128,5 +128,9 @@ export default class Tutorial extends DOMDisplay {
     )
   }
 
-  clearTutorial = () => {}
+  clearTutorial = () => {
+    const worldWrapper = this.getElement('#world-wrapper'),
+      legend = this.getElement('#legend')
+    worldWrapper.removeChild(legend)
+  }
 }

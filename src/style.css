@@ -156,6 +156,7 @@ div.chain-wrapper {
 
 .tutorial-wrapper {
   position: absolute;
+  top: 98px;
 }
 
 .tutorial-message {
@@ -163,6 +164,7 @@ div.chain-wrapper {
   margin: 0 auto;
   font-size: 24px;
   line-height: 1.5;
+  padding: 6px;
 }
 
 #tut-msg-1 {
