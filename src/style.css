@@ -27,6 +27,11 @@ button.btn {
   border-radius: 5px;
 }
 
+#title:hover {
+  color: red;
+  cursor: pointer;
+}
+
 .game {
   margin: 0 auto;
 }

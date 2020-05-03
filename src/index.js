@@ -14,9 +14,15 @@ display.renderGame()
 display.renderTitle()
 display.renderWorld()
 
-const introDisplay = new Intro(display.worldSize)
+const title = display.getElement('#title')
+title.addEventListener('click', handleClickTitle, false)
 
-const tutorialDisplay = new Tutorial(display.worldSize)
+const introDisplay = new Intro(display.worldSize),
+  tutorialDisplay = new Tutorial(display.worldSize)
+
+function handleClickTitle() {
+  location.reload()
+}
 
 function onTutorialEnd() {
   game.init()

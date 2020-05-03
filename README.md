@@ -16,14 +16,15 @@ chicken-meets-worm$ npm run start
 ## Todos
 
 1. [ ] Set number of objects based on window area
-2. [ ] Tutorial
-3. [ ] Levels
-4. [x] ~~Make children stick to parent onClick.~~ Done. YAY :D
-5. [x] Fix bug: Chain count stuck at max 10
-6. [x] Add Replay button and persist high score on replay
-7. [x] Add high score
-8. [x] Make worms Fabulous
-9. [x] Spawn more children when they get attached to Parent.
-10. [x] Style world, score, energy, chain, game-over message
-11. [x] Logo
+2. [ ] Levels
+3. [x] ~~Make children stick to parent onClick.~~ Done. YAY :D
+4. [x] Fix bug: Chain count stuck at max 10
+5. [x] Add Replay button and persist high score on replay
+6. [x] Add high score
+7. [x] Make worms Fabulous
+8. [x] Spawn more children when they get attached to Parent.
+9. [x] Style world, score, energy, chain, game-over message
+10. [x] Logo
+11. [x] Tutorial
+12. [x] Reload window on title click
         ...

@@ -65,7 +65,7 @@ export default class DOMDisplay {
   }
 
   renderTitle = () => {
-    const title = this.createElement('div', 'title', null),
+    const title = this.createElement('div', 'title', 'title'),
       heading = this.createElement('h1', null, null, 'CHICKEN MEETS WORM'),
       game = this.getElement('#game')
 
