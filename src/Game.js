@@ -41,6 +41,7 @@ export default class Game {
     this.clicking = false
     this.init = this.init.bind(this)
     this.clearGame = this.clearGame.bind(this)
+    this.replayGame = this.replayGame.bind(this)
   }
 
   handleMouseMove = (e) => {
@@ -194,7 +195,7 @@ export default class Game {
     this.energy = energy
   }
 
-  replayGame = () => {
+  replayGame() {
     this.resetGame()
     this.display.clearGameEnd()
   }
@@ -230,7 +231,6 @@ export default class Game {
   gameOver = () => {
     this.score.calculateHighScore()
     window.cancelAnimationFrame(this.animationReq)
-
     this.display.renderGameEnd(
       this.replayGame,
       this.score.score,
@@ -289,9 +289,7 @@ export default class Game {
   }
 
   init() {
-    // this.display.renderGame()
-    // this.display.renderTitle()
-    // this.display.renderWorld()
+    this.display.renderLegend()
     this.display.renderScore()
     this.display.renderChain()
     this.display.renderEnergy()

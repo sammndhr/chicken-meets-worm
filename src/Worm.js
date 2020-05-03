@@ -18,7 +18,6 @@ export default class Worm extends MovingObject {
     this.sprite = sprite
     this.size = size
     this.moves = this.moves.bind(this)
-    // console.log(vel)
   }
 
   moves(game) {

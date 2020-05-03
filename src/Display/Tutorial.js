@@ -22,10 +22,6 @@ export default class Tutorial extends DOMDisplay {
   }
 
   renderMoveParentTut = () => {
-    const legend = this.getElement('#legend')
-
-    if (legend) legend.style.display = 'none'
-
     const tutorialWrapper = this.createElement('div', 'tutorial-wrapper'),
       message1 = this.createElement(
         'div',
@@ -52,11 +48,8 @@ export default class Tutorial extends DOMDisplay {
   }
 
   renderChildrenTut = () => {
-    const legend = this.getElement('#legend')
-
+    this.renderLegend()
     this.clearPrevTut()
-
-    if (legend) legend.style.display = 'block'
 
     this.updateElement(
       '#tut-msg-0',
@@ -134,7 +127,7 @@ export default class Tutorial extends DOMDisplay {
       legend = this.getElement('#legend'),
       tutorialWrapper = this.getElement('.tutorial-wrapper')
 
-    if (legend) legend.style.display = 'unset'
+    if (legend) worldWrapper.removeChild(legend)
     if (tutorialWrapper) worldWrapper.removeChild(tutorialWrapper)
   }
 }

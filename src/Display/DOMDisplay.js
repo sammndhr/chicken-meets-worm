@@ -80,17 +80,21 @@ export default class DOMDisplay {
         'world-wrapper'
       ),
       world = this.createElement('canvas', null, 'world'),
-      legend = this.createElement('div', 'legend', 'legend'),
       { width, height } = this.worldSize,
       game = this.getElement('#game')
 
     world.width = this.worldSize.width
     world.height = this.worldSize.height
     game.append(worldWrapper)
-    worldWrapper.append(legend)
     worldWrapper.append(world)
     worldWrapper.style.width = width + 2 + 'px'
     worldWrapper.style.height = height + 2 + 'px'
+  }
+
+  renderLegend = () => {
+    const legend = this.createElement('div', 'legend', 'legend'),
+      worldWrapper = this.getElement('#world-wrapper')
+    worldWrapper.append(legend)
   }
 
   renderEnergy() {

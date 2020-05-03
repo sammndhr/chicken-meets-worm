@@ -32,6 +32,12 @@ export default class Parent extends MovingObject {
     this.hitsPredator = this.hitsPredator.bind(this)
     this.hitsChild = this.hitsChild.bind(this)
     this.clicking = false
+
+    this.isTutorial = false
+  }
+
+  setIsTutorial = (val) => {
+    this.isTutorial = val
   }
 
   setCurrPredCols = (currPredCols) => {
@@ -113,12 +119,11 @@ export default class Parent extends MovingObject {
       child.setChainPos(null)
       child.setNextChild(null)
       child.setIndependence(true)
-      const vel = { dx: 2, dy: 2 }
-      child.setVelocity(vel)
 
-      const [x, y] = child.currDir,
-        { dx, dy } = vel
-      child.setCurrDir([x * dx, y * dy])
+      if (!this.isTutorial) {
+        const vel = { dx: 2, dy: 2 }
+        child.setVelocity(vel)
+      }
       child.setRandomDir()
     }
 

@@ -12,12 +12,12 @@ export default class TutorialGame extends Game {
     this.tutorialNo = 0
     this.onTutorialEnd = onTutorialEnd
     this.clearGame = this.clearGame.bind(this)
+    this.replayGame = this.replayGame.bind(this)
   }
 
   destroyChild = (child) => {
     this.children.deleteNode(child)
-    if (this.tutorialNo > 100 || this.children.size < this.childCount)
-      this.spawnChildren(17.5)
+    if (this.children.size < this.childCount) this.spawnChildren(17.5)
   }
 
   clearGame() {
@@ -25,6 +25,11 @@ export default class TutorialGame extends Game {
     this.clearCanvas()
     this.display.clearTutorial()
     window.removeEventListener('keydown', this.handlePressKey)
+  }
+
+  replayGame() {
+    super.replayGame()
+    this.parent.setIsTutorial(true)
   }
 
   handlePressSpace = () => {
@@ -49,7 +54,7 @@ export default class TutorialGame extends Game {
     if (e.keyCode === 32) this.handlePressSpace()
   }
 
-  checkInRange() {
+  checkInRange = () => {
     const parent = this.parent,
       children = this.children.toArray(),
       predators = this.predators.toArray(),
@@ -76,6 +81,10 @@ export default class TutorialGame extends Game {
   }
 
   draw = (timestamp) => {
+    if ([2, 3].includes(this.tutorialNo) && this.energy.count === 0) {
+      return this.gameOver()
+    }
+
     const canvas = this.world.canvas,
       ctx = canvas.getContext('2d')
     ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -101,12 +110,6 @@ export default class TutorialGame extends Game {
       for (const predator of predators) {
         predator.moves()
         predator.draw(ctx, { x: 30, y: 25 })
-      }
-    }
-
-    if (this.tutorialNo >= 2) {
-      if (this.energy.count === 0) {
-        return this.gameOver()
       }
     }
 
@@ -141,9 +144,9 @@ export default class TutorialGame extends Game {
   initTutorial0 = () => {
     this.setTutorialNo(0)
     this.initWorld()
-
     this.display.renderMoveParentTut()
     this.initParent(30)
+    this.parent.setIsTutorial(true)
     window.addEventListener('mousemove', this.handleMouseMove, false)
     window.addEventListener('keydown', this.handlePressKey)
     this.animationReq = window.requestAnimationFrame(this.draw)
@@ -151,6 +154,7 @@ export default class TutorialGame extends Game {
 
   initTutorial1 = () => {
     this.setTutorialNo(1)
+    this.display.renderChildrenTut()
     this.display.renderScore()
     this.display.renderChain()
     this.initChain()
@@ -159,12 +163,13 @@ export default class TutorialGame extends Game {
     this.parent.score = this.score
     this.childCount = 5
     this.initChildren(17.5)
-    this.display.renderChildrenTut()
   }
 
   initTutorial2 = () => {
     this.setTutorialNo(2)
     this.score.reset()
+    this.parent.setIsTutorial(true)
+
     this.parent.deleteAllChildren()
     for (const child of this.children.toArray()) {
       child.setPos(child.getRandomPos())
@@ -183,18 +188,17 @@ export default class TutorialGame extends Game {
 
   initTutorial3 = () => {
     this.setTutorialNo(3)
-    this.score.reset()
-    this.energy.reset()
-    this.display.clearGameEnd()
+    this.replayGame()
+    this.parent.setIsTutorial(true)
 
     const children = this.children.toArray()
+
     for (const child of children) {
       this.parent.hitsChild(child)
       child.moves(this.parent.pos)
     }
-    const pred = this.predators.toArray()[0]
 
-    this.animationReq = window.requestAnimationFrame(this.draw)
+    const pred = this.predators.toArray()[0]
     window.addEventListener('mouseup', this.handleMouseUp, false)
     window.addEventListener('mousedown', this.handleMouseDown, false)
 
@@ -206,13 +210,8 @@ export default class TutorialGame extends Game {
 
   initTutorial4 = () => {
     this.setTutorialNo(4)
-    this.score.reset()
     this.energy.max = 5
-    this.energy.reset()
-
-    this.display.clearGameEnd()
-    this.animationReq = window.requestAnimationFrame(this.draw)
-
+    this.replayGame()
     this.parent.deleteAllChildren()
     for (const child of this.children.toArray()) {
       child.setPos(child.getRandomPos())
@@ -223,6 +222,11 @@ export default class TutorialGame extends Game {
     pred.setCurrDir([0.23, -1])
     this.wormCount = 5
     this.initWorms(20, { dx: 0.5, dy: 0.5 })
+    this.childCount = 0
+    this.parent.hitsPredator()
+    for (const child of this.children.toArray()) {
+      this.destroyChild(child)
+    }
 
     this.display.renderWormTut()
   }
