@@ -165,6 +165,7 @@ div.chain-wrapper {
   line-height: 1.5;
 }
 
-.tutorial-msg-keypress {
+#tut-msg-1 {
+  font-size: 16px;
   position: absolute;
 }

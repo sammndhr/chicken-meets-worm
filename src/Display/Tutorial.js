@@ -33,11 +33,7 @@ export default class Tutorial extends DOMDisplay {
         'tut-msg-0',
         'Move your mouse to move the chicken.'
       ),
-      message2 = this.createElement(
-        'div',
-        'tutorial-msg-keypress',
-        'tut-msg-1'
-      ),
+      message2 = this.createElement('div', 'tutorial-message', 'tut-msg-1'),
       worldWrapper = this.getElement('#world-wrapper')
 
     worldWrapper.append(tutorialMsgWrapper)
@@ -131,4 +127,6 @@ export default class Tutorial extends DOMDisplay {
       6000
     )
   }
+
+  clearTutorial = () => {}
 }

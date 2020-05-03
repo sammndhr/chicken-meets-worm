@@ -1,9 +1,38 @@
 import Game from './Game'
+
 export default class TutorialGame extends Game {
   constructor(display, childCount = 0, predatorCount = 0, wormCount = 0) {
     super(display, childCount, predatorCount, wormCount)
     this.tutorialNo = 0
     this.destroyChild = this.destroyChild.bind(this)
+    this.draw = this.draw.bind(this)
+  }
+
+  destroyChild(child) {
+    this.children.deleteNode(child)
+    if (this.tutorialNo > 100 || this.children.size < this.childCount)
+      this.spawnChildren(17.5)
+  }
+
+  clearGame = () => {
+    window.removeEventListener('mousedown', this.handleMouseDown, false)
+    window.removeEventListener('mouseup', this.handleMouseUp, false)
+    window.cancelAnimationFrame(this.animationReq)
+    window.removeEventListener('mousemove', this.handleMouseMove, false)
+  }
+
+  handleKeyPress = (e) => {
+    if (e.keyCode === 13) console.log('game start')
+    if (e.keyCode !== 32) return
+    if (this.tutorialNo === 0) {
+      this.initTutorial1()
+    } else if (this.tutorialNo === 1) {
+      this.initTutorial2()
+    } else if (this.tutorialNo === 2) {
+      this.initTutorial3()
+    } else if (this.tutorialNo === 3) {
+      this.initTutorial4()
+    }
   }
 
   checkInRange() {
@@ -33,7 +62,7 @@ export default class TutorialGame extends Game {
     }
   }
 
-  drawTutorial = (timestamp) => {
+  draw = (timestamp) => {
     const canvas = this.world.canvas,
       ctx = canvas.getContext('2d')
     ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -84,7 +113,7 @@ export default class TutorialGame extends Game {
     }
 
     this.checkInRange()
-    this.animationReq = window.requestAnimationFrame(this.drawTutorial)
+    this.animationReq = window.requestAnimationFrame(this.draw)
   }
 
   setTutorialNo = (number) => {
@@ -102,8 +131,8 @@ export default class TutorialGame extends Game {
     this.display.renderMoveParentTut()
     this.initParent(30)
     window.addEventListener('mousemove', this.handleMouseMove, false)
-    window.addEventListener('keydown', this.handlePressSpace)
-    this.animationReq = window.requestAnimationFrame(this.drawTutorial)
+    window.addEventListener('keydown', this.handleKeyPress)
+    this.animationReq = window.requestAnimationFrame(this.draw)
   }
 
   initTutorial1 = () => {
@@ -151,7 +180,7 @@ export default class TutorialGame extends Game {
     }
     const pred = this.predators.toArray()[0]
 
-    this.animationReq = window.requestAnimationFrame(this.drawTutorial)
+    this.animationReq = window.requestAnimationFrame(this.draw)
     window.addEventListener('mouseup', this.handleMouseUp, false)
     window.addEventListener('mousedown', this.handleMouseDown, false)
 
@@ -181,32 +210,5 @@ export default class TutorialGame extends Game {
     this.initWorms(20, { dx: 0.5, dy: 0.5 })
 
     this.display.renderWormTut()
-  }
-
-  destroyChild(child) {
-    this.children.deleteNode(child)
-    if (this.tutorialNo > 100 || this.children.size < this.childCount)
-      this.spawnChildren(17.5)
-  }
-
-  initGame = () => {
-    window.removeEventListener('mousedown', this.handleMouseDown, false)
-    window.removeEventListener('mouseup', this.handleMouseUp, false)
-    window.cancelAnimationFrame(this.animationReq)
-    window.removeEventListener('mousemove', this.handleMouseMove, false)
-  }
-
-  handlePressSpace = (e) => {
-    if (e.keyCode === 13) console.log('game start')
-    if (e.keyCode !== 32) return
-    if (this.tutorialNo === 0) {
-      this.initTutorial1()
-    } else if (this.tutorialNo === 1) {
-      this.initTutorial2()
-    } else if (this.tutorialNo === 2) {
-      this.initTutorial3()
-    } else if (this.tutorialNo === 3) {
-      this.initTutorial4()
-    }
   }
 }
