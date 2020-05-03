@@ -9,6 +9,7 @@ button {
   text-align: center;
   font-size: 1rem;
   font-family: 'Schoolbell', sans-serif;
+  letter-spacing: 5px;
 }
 
 button.btn {
@@ -16,7 +17,6 @@ button.btn {
   padding: 1rem 2rem;
   text-align: center;
   cursor: pointer;
-  letter-spacing: 5px;
   font-size: 1.5rem;
   text-transform: uppercase;
   margin: 5px auto;
@@ -34,7 +34,6 @@ button.btn {
 .title h1 {
   font-size: 24px;
   margin: 32px;
-  letter-spacing: 5px;
 }
 
 .world-wrapper {
@@ -88,19 +87,51 @@ div.chain-wrapper {
   animation: pulse 2s ease;
 }
 
-.end-wrapper {
+.end-wrapper,
+.intro-wrapper {
   position: absolute;
-  top: 35%;
   font-size: 32px;
   margin: 0 auto;
 }
 
+.intro-wrapper {
+  font-size: 24px;
+  width: 100%;
+}
+
+.intro {
+  width: 100%;
+}
+
+.intro-message {
+  display: block;
+  width: 100%;
+  padding: 16px;
+}
+
+.start {
+  display: block;
+  cursor: pointer;
+  border-bottom: 1px solid black;
+  width: max-content;
+  margin: 16px auto;
+}
+
+.start:hover {
+  color: red;
+  border-bottom-color: red;
+}
+
 .game-end {
-  background-color: rgba(255, 255, 255, 0.5);
   width: max-content;
   margin: 0 auto;
   padding: 30px 80px;
 }
+
+.game-end {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
 .game-end div {
   margin-bottom: 5px;
 }
@@ -121,4 +152,22 @@ div.chain-wrapper {
   100% {
     transform: scale(1);
   }
+}
+
+.tutorial-wrapper {
+  position: absolute;
+  top: 98px;
+}
+
+.tutorial-message {
+  width: 60%;
+  margin: 0 auto;
+  font-size: 24px;
+  line-height: 1.5;
+  padding: 6px;
+}
+
+#tut-msg-1 {
+  font-size: 16px;
+  position: absolute;
 }

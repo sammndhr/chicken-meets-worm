@@ -9,7 +9,6 @@ import wormImage from './imgs/worm.png'
 import Parent from './Parent.js'
 import Predator from './Predator.js'
 import Score from './Score.js'
-import './style.css'
 import World from './World.js'
 import Worm from './Worm.js'
 
@@ -40,17 +39,20 @@ export default class Game {
     this.timeSinceWorm = 0
     this.animationReq = null
     this.clicking = false
+    this.init = this.init.bind(this)
+    this.clearGame = this.clearGame.bind(this)
+    this.replayGame = this.replayGame.bind(this)
   }
 
   handleMouseMove = (e) => {
     if (this.clicking) return
     this.mouse = { x: e.clientX, y: e.clientY }
-    this.display.removeHealthAnimation()
+    this.display.removeAnimation('worm-left')
   }
 
   handleMouseDown = (e) => {
     if (this.energy.count <= 0.5) {
-      this.display.animateHealth()
+      this.display.animate('worm-left')
       return
     }
     const mouse = { x: e.clientX, y: e.clientY }
@@ -126,12 +128,12 @@ export default class Game {
     }
   }
 
-  spawnWorms = (r) => {
+  spawnWorms = (r, vel) => {
+    if (!vel) vel = { dx: 2, dy: 2 }
     const size = { width: r * 2, height: r * 2 }
-
     while (this.worms.size < this.wormCount) {
       const randomPos = this.world.getRandomPos(r),
-        worm = new Worm(randomPos, r, this.world, WormSprite, size)
+        worm = new Worm(randomPos, r, this.world, WormSprite, size, vel)
       worm.setRandomDir()
       this.worms.appendToTail(worm)
     }
@@ -165,8 +167,8 @@ export default class Game {
     this.parent = parent
   }
 
-  initWorms = (r) => {
-    this.spawnWorms(r)
+  initWorms = (r, vel) => {
+    this.spawnWorms(r, vel)
   }
 
   initChain = () => {
@@ -187,13 +189,13 @@ export default class Game {
     this.score = score
   }
 
-  initEnergy = () => {
-    const energy = new Energy(this.display)
+  initEnergy = (initCount, max) => {
+    const energy = new Energy(this.display, initCount, max)
     energy.init()
     this.energy = energy
   }
 
-  replayGame = () => {
+  replayGame() {
     this.resetGame()
     this.display.clearGameEnd()
   }
@@ -210,12 +212,20 @@ export default class Game {
     this.timeSinceWorm = 0
 
     this.initWorld()
-    this.initChain(1)
+    this.initChain()
     this.initParent(30)
     this.initChildren(17.5)
     this.initPredators(35)
     this.initWorms(20)
     this.animationReq = window.requestAnimationFrame(this.draw)
+  }
+
+  clearGame() {
+    this.display.clearGameEnd()
+    window.cancelAnimationFrame(this.animationReq)
+    window.removeEventListener('mousemove', this.handleMouseMove, false)
+    window.removeEventListener('mousedown', this.handleMouseDown, false)
+    window.removeEventListener('mouseup', this.handleMouseUp, false)
   }
 
   gameOver = () => {
@@ -227,6 +237,12 @@ export default class Game {
       this.score.highScore
     )
     return
+  }
+
+  clearCanvas = () => {
+    const canvas = this.world.canvas,
+      ctx = canvas.getContext('2d')
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
   }
 
   draw = (timestamp) => {
@@ -246,7 +262,7 @@ export default class Game {
       predators = this.predators.toArray(),
       worms = this.worms.toArray()
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    this.clearCanvas()
 
     this.parent.moves(this.mouse)
     this.parent.draw(ctx, { x: 30, y: 25 })
@@ -272,10 +288,8 @@ export default class Game {
     this.animationReq = window.requestAnimationFrame(this.draw)
   }
 
-  init = () => {
-    this.display.renderGame()
-    this.display.renderTitle()
-    this.display.renderWorld()
+  init() {
+    this.display.renderLegend()
     this.display.renderScore()
     this.display.renderChain()
     this.display.renderEnergy()
@@ -283,7 +297,7 @@ export default class Game {
     window.addEventListener('mousemove', this.handleMouseMove, false)
     window.addEventListener('mousedown', this.handleMouseDown, false)
     window.addEventListener('mouseup', this.handleMouseUp, false)
-    this.initEnergy()
+    this.initEnergy(5, 5)
     this.initWorld()
     this.initScore()
     this.initChain()

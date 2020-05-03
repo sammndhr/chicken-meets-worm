@@ -3,7 +3,7 @@ import { getRandomBetween } from './utils'
 export default class World {
   constructor(display) {
     this.display = display
-    this.canvas = display.world
+    this.canvas = display.getElement('#world')
     this.size = this.display.worldSize
     this.bounds = { top: null, right: null, bottom: null, right: null }
     this.offsets = { top: null, left: null }
