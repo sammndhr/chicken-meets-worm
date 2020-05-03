@@ -40,8 +40,7 @@ export default class Game {
     this.animationReq = null
     this.clicking = false
     this.init = this.init.bind(this)
-    this.checkInRange = this.checkInRange.bind(this)
-    this.destroyChild = this.destroyChild.bind(this)
+    this.clearGame = this.clearGame.bind(this)
   }
 
   handleMouseMove = (e) => {
@@ -69,12 +68,12 @@ export default class Game {
     this.worms.deleteNode(worm)
   }
 
-  destroyChild(child) {
+  destroyChild = (child) => {
     this.children.deleteNode(child)
     this.spawnChildren(17.5)
   }
 
-  checkInRange() {
+  checkInRange = () => {
     const parent = this.parent,
       children = this.children.toArray(),
       predators = this.predators.toArray(),
@@ -220,15 +219,30 @@ export default class Game {
     this.animationReq = window.requestAnimationFrame(this.draw)
   }
 
+  clearGame() {
+    this.display.clearGameEnd()
+    window.cancelAnimationFrame(this.animationReq)
+    window.removeEventListener('mousemove', this.handleMouseMove, false)
+    window.removeEventListener('mousedown', this.handleMouseDown, false)
+    window.removeEventListener('mouseup', this.handleMouseUp, false)
+  }
+
   gameOver = () => {
     this.score.calculateHighScore()
     window.cancelAnimationFrame(this.animationReq)
+
     this.display.renderGameEnd(
       this.replayGame,
       this.score.score,
       this.score.highScore
     )
     return
+  }
+
+  clearCanvas = () => {
+    const canvas = this.world.canvas,
+      ctx = canvas.getContext('2d')
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
   }
 
   draw = (timestamp) => {
@@ -248,7 +262,7 @@ export default class Game {
       predators = this.predators.toArray(),
       worms = this.worms.toArray()
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    this.clearCanvas()
 
     this.parent.moves(this.mouse)
     this.parent.draw(ctx, { x: 30, y: 25 })

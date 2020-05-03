@@ -50,11 +50,13 @@ export default class DOMDisplay {
   }
 
   updateElement = (selector, val) => {
-    this.getElement(selector).innerText = val
+    const elem = this.getElement(selector)
+    if (elem) elem.innerText = val
   }
 
   clearElement = (selector) => {
-    this.getElement(selector).innerText = ''
+    const elem = this.getElement(selector)
+    if (elem) elem.innerText = ''
   }
 
   renderGame = () => {

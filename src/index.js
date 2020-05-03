@@ -18,8 +18,12 @@ const introDisplay = new Intro(display.worldSize)
 
 const tutorialDisplay = new Tutorial(display.worldSize)
 
+function onTutorialEnd() {
+  game.init()
+}
+
 function handleClickTutorial() {
-  const tutorialGame = new TutorialGame(tutorialDisplay)
+  const tutorialGame = new TutorialGame(tutorialDisplay, onTutorialEnd)
   introDisplay.clearIntro()
   tutorialGame.initTutorial()
 }

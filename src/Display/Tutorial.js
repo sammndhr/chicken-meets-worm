@@ -26,7 +26,7 @@ export default class Tutorial extends DOMDisplay {
 
     if (legend) legend.style.display = 'none'
 
-    const tutorialMsgWrapper = this.createElement('div', 'tutorial-wrapper'),
+    const tutorialWrapper = this.createElement('div', 'tutorial-wrapper'),
       message1 = this.createElement(
         'div',
         'tutorial-message',
@@ -36,13 +36,13 @@ export default class Tutorial extends DOMDisplay {
       message2 = this.createElement('div', 'tutorial-message', 'tut-msg-1'),
       worldWrapper = this.getElement('#world-wrapper')
 
-    worldWrapper.append(tutorialMsgWrapper)
-    tutorialMsgWrapper.style.width = this.worldSize.width + 4 + 'px'
-    tutorialMsgWrapper.style.height = this.worldSize.height + 4 + 'px'
+    worldWrapper.append(tutorialWrapper)
+    tutorialWrapper.style.width = this.worldSize.width + 4 + 'px'
+    tutorialWrapper.style.height = this.worldSize.height + 4 + 'px'
     message2.style.width = this.worldSize.width + 4 + 'px'
     message2.style.top = this.worldSize.height - 36 + 'px'
-    tutorialMsgWrapper.append(message1)
-    tutorialMsgWrapper.append(message2)
+    tutorialWrapper.append(message1)
+    tutorialWrapper.append(message2)
 
     this.changeMessage(
       '#tut-msg-1',
@@ -83,12 +83,12 @@ export default class Tutorial extends DOMDisplay {
     this.changeMessage(
       '#tut-msg-0',
       "The worms show your health. Every encounter with a cat costs you 1 worm. The game ends when you're out of worms.",
-      4000
+      5000
     )
     this.changeMessage(
       '#tut-msg-1',
       'Press SPACE to continue and ENTER to skip tutorial.',
-      7000
+      8000
     )
   }
 
@@ -101,12 +101,12 @@ export default class Tutorial extends DOMDisplay {
     this.changeMessage(
       '#tut-msg-0',
       "Do this sparingly, cause you won't be able to move while clicking! And you can't use it if you don't have enough worms.",
-      3500
+      4000
     )
     this.changeMessage(
       '#tut-msg-1',
       'Press SPACE to continue and ENTER to skip tutorial.',
-      6500
+      7000
     )
   }
 
@@ -129,8 +129,12 @@ export default class Tutorial extends DOMDisplay {
   }
 
   clearTutorial = () => {
+    this.clearPrevTut()
     const worldWrapper = this.getElement('#world-wrapper'),
-      legend = this.getElement('#legend')
-    worldWrapper.removeChild(legend)
+      legend = this.getElement('#legend'),
+      tutorialWrapper = this.getElement('.tutorial-wrapper')
+
+    if (legend) legend.style.display = 'unset'
+    if (tutorialWrapper) worldWrapper.removeChild(tutorialWrapper)
   }
 }

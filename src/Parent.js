@@ -113,7 +113,7 @@ export default class Parent extends MovingObject {
       child.setChainPos(null)
       child.setNextChild(null)
       child.setIndependence(true)
-      const vel = { dx: 3, dy: 3 }
+      const vel = { dx: 2, dy: 2 }
       child.setVelocity(vel)
 
       const [x, y] = child.currDir,
