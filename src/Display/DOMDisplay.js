@@ -8,12 +8,7 @@ import wormRight from '../imgs/worm-right.png'
 
 export default class DOMDisplay {
   constructor({ width = 400, height = 700 }) {
-    this.game = null
     this.worldSize = { width, height }
-    this.worldWrapper = null
-    this.gameEnd = null
-    this.legend = null
-    this.world = null
     this.renderChain = this.renderChain.bind(this)
     this.renderEnergy = this.renderEnergy.bind(this)
     this.renderScore = this.renderScore.bind(this)
@@ -64,50 +59,57 @@ export default class DOMDisplay {
 
   renderGame = () => {
     const game = this.createElement('div', 'game', 'game')
-    this.game = game
-    document.body.appendChild(this.game)
+    document.body.appendChild(game)
   }
 
   renderTitle = () => {
-    const title = this.createElement('div', 'title', null)
-    const heading = this.createElement('h1', null, null, 'CHICKEN MEETS WORM')
-    this.game.append(title)
+    const title = this.createElement('div', 'title', null),
+      heading = this.createElement('h1', null, null, 'CHICKEN MEETS WORM'),
+      game = this.getElement('#game')
+
+    game.append(title)
     title.append(heading)
   }
 
   renderWorld = () => {
-    const worldWrapper = this.createElement('div', 'world-wrapper'),
+    const worldWrapper = this.createElement(
+        'div',
+        'world-wrapper',
+        'world-wrapper'
+      ),
       world = this.createElement('canvas', null, 'world'),
       legend = this.createElement('div', 'legend', 'legend'),
-      { width, height } = this.worldSize
+      { width, height } = this.worldSize,
+      game = this.getElement('#game')
+
     world.width = this.worldSize.width
     world.height = this.worldSize.height
-    this.game.append(worldWrapper)
+    game.append(worldWrapper)
     worldWrapper.append(legend)
     worldWrapper.append(world)
     worldWrapper.style.width = width + 2 + 'px'
     worldWrapper.style.height = height + 2 + 'px'
-    this.worldWrapper = worldWrapper
-    this.legend = legend
-    this.world = world
   }
 
   renderEnergy() {
-    const energyWrapper = this.createElement(
-      'div',
-      'energy-wrapper',
-      'energy-wrapper'
-    )
-    this.legend.appendChild(energyWrapper)
+    const legend = this.getElement('#legend'),
+      energyWrapper = this.createElement(
+        'div',
+        'energy-wrapper',
+        'energy-wrapper'
+      )
+
+    legend.appendChild(energyWrapper)
     this.updateEnergyBar(5)
   }
 
   renderChain() {
-    const chainWrapper = this.createElement('div', 'chain-wrapper')
-    const countImg = this.createImage(childCountImg, 'image', 'chain-count')
-    const chain = this.createElement('span', 'legend-text', 'chain')
+    const chainWrapper = this.createElement('div', 'chain-wrapper'),
+      countImg = this.createImage(childCountImg, 'image', 'chain-count'),
+      chain = this.createElement('span', 'legend-text', 'chain'),
+      legend = this.getElement('#legend')
 
-    this.legend.append(chainWrapper)
+    legend.append(chainWrapper)
     chainWrapper.append(countImg)
     chainWrapper.append(chain)
   }
@@ -122,16 +124,18 @@ export default class DOMDisplay {
         eW.removeChild(eW.lastChild)
       }
     } else if (eW.childElementCount < i) {
-      let left = true
-      let wormCount = eW.childElementCount
+      let left = true,
+        wormCount = eW.childElementCount
+
       if (wormCount % 2 !== 0) {
         eW.append(this.createImage(wormRight, 'worm-right'))
         wormCount++
       }
 
       while (wormCount < i) {
-        const wormL = this.createImage(wormLeft, 'worm-left')
-        const wormR = this.createImage(wormRight, 'worm-right')
+        const wormL = this.createImage(wormLeft, 'worm-left'),
+          wormR = this.createImage(wormRight, 'worm-right')
+
         if (left) {
           eW.append(wormL)
           left = false
@@ -145,20 +149,22 @@ export default class DOMDisplay {
   }
 
   renderScore() {
-    const score = this.createElement('div', ['legend-text', 'score'], 'score')
-    this.legend.append(score)
+    const score = this.createElement('div', ['legend-text', 'score'], 'score'),
+      legend = this.getElement('#legend')
+
+    legend.append(score)
   }
 
   renderGameEnd = (handleClickReplay, score, highScore) => {
-    const gameEndWrapper = this.createElement('div', 'end-wrapper')
-    const gameEnd = this.createElement('div', 'game-end')
-    gameEndWrapper.style.width = this.worldSize.width + 4 + 'px'
-    this.gameEnd = gameEnd
-    this.gameEndWrapper = gameEndWrapper
-    this.worldWrapper.append(gameEndWrapper)
-    gameEndWrapper.append(gameEnd)
+    const gameEndWrapper = this.createElement('div', 'end-wrapper'),
+      gameEnd = this.createElement('div', 'game-end'),
+      worldWrapper = this.getElement('#world-wrapper')
 
+    gameEndWrapper.style.width = this.worldSize.width + 4 + 'px'
+    worldWrapper.append(gameEndWrapper)
+    gameEndWrapper.append(gameEnd)
     gameEndWrapper.style.top = 98 + this.worldSize.height / 4 + 'px'
+
     this.renderGameOverMessage()
     this.renderEndScore(score, highScore)
     this.renderReplayButton(handleClickReplay)
@@ -167,55 +173,60 @@ export default class DOMDisplay {
   clearGameEnd = () => {
     const gameEnd = this.getElement('.end-wrapper'),
       worldWrapper = this.getElement('.world-wrapper')
+
     if (gameEnd) worldWrapper.removeChild(gameEnd)
   }
 
   renderGameOverMessage = () => {
-    const message = this.createElement('div', 'game-over', null, 'Game Over!')
-    this.gameEnd.append(message)
+    const message = this.createElement('div', 'game-over', null, 'Game Over!'),
+      gameEnd = this.getElement('.game-end')
+
+    gameEnd.append(message)
   }
 
   renderReplayButton = (handleClickReplay) => {
-    const button = this.createElement('button', 'btn', 'replay')
-    button.innerText = 'Replay'
+    const button = this.createElement('button', 'btn', 'replay'),
+      gameEnd = this.getElement('.game-end')
 
+    button.innerText = 'Replay'
     button.addEventListener('click', handleClickReplay)
-    this.gameEnd.append(button)
+    gameEnd.append(button)
   }
 
   renderEndScore = (score, highScore) => {
-    const endScoreWrapper = this.createElement('div', 'wrapper')
-    const endScoreLabel = this.createElement(
-      'span',
-      'score-label',
-      null,
-      'Your score: '
-    )
-    const endScore = this.createElement(
-      'span',
-      'score',
-      'end-score',
-      score.toString()
-    )
-    const bestScoreWrapper = this.createElement('div', 'wrapper')
-    const bestScoreLabel = this.createElement(
-      'span',
-      'score-label',
-      null,
-      'Best score: '
-    )
-    const bestScore = this.createElement(
-      'span',
-      'score',
-      'best-score',
-      highScore.toString()
-    )
+    const endScoreWrapper = this.createElement('div', 'wrapper'),
+      endScoreLabel = this.createElement(
+        'span',
+        'score-label',
+        null,
+        'Your score: '
+      ),
+      endScore = this.createElement(
+        'span',
+        'score',
+        'end-score',
+        score.toString()
+      ),
+      bestScoreWrapper = this.createElement('div', 'wrapper'),
+      bestScoreLabel = this.createElement(
+        'span',
+        'score-label',
+        null,
+        'Best score: '
+      ),
+      bestScore = this.createElement(
+        'span',
+        'score',
+        'best-score',
+        highScore.toString()
+      ),
+      gameEnd = this.getElement('.game-end')
 
     endScoreWrapper.append(endScoreLabel)
     endScoreWrapper.append(endScore)
     bestScoreWrapper.append(bestScoreLabel)
     bestScoreWrapper.append(bestScore)
-    this.gameEnd.append(endScoreWrapper)
-    this.gameEnd.append(bestScoreWrapper)
+    gameEnd.append(endScoreWrapper)
+    gameEnd.append(bestScoreWrapper)
   }
 }

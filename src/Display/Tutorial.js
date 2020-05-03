@@ -1,13 +1,16 @@
 import DOMDisplay from './DOMDisplay'
 
 export default class Tutorial extends DOMDisplay {
-  constructor(game, world, worldWrapper, worldSize, legend) {
+  constructor(worldSize) {
     super(worldSize)
-    this.game = game
-    this.world = world
-    this.worldWrapper = worldWrapper
-    this.legend = legend
     this.settimeout = []
+  }
+
+  clearPrevTut = () => {
+    while (this.settimeout.length) {
+      clearTimeout(this.settimeout.pop())
+    }
+    this.clearElement('#tut-msg-1')
   }
 
   changeMessage = (selector, message, time) => {
@@ -19,28 +22,32 @@ export default class Tutorial extends DOMDisplay {
   }
 
   renderMoveParentTut = () => {
-    const legend = this.legend
+    const legend = this.getElement('#legend')
+
     if (legend) legend.style.display = 'none'
-    const tutorialMsgWrapper = this.createElement('div', 'tutorial-wrapper')
-    const message1 = this.createElement(
-      'div',
-      'tutorial-message',
-      'tut-msg-0',
-      'Move your mouse to move the chicken.'
-    )
-    const message2 = this.createElement(
-      'div',
-      'tutorial-msg-keypress',
-      'tut-msg-1'
-    )
-    this.worldWrapper.append(tutorialMsgWrapper)
-    this.worldWrapper.append(message2)
+
+    const tutorialMsgWrapper = this.createElement('div', 'tutorial-wrapper'),
+      message1 = this.createElement(
+        'div',
+        'tutorial-message',
+        'tut-msg-0',
+        'Move your mouse to move the chicken.'
+      ),
+      message2 = this.createElement(
+        'div',
+        'tutorial-msg-keypress',
+        'tut-msg-1'
+      ),
+      worldWrapper = this.getElement('#world-wrapper')
+
+    worldWrapper.append(tutorialMsgWrapper)
+    worldWrapper.append(message2)
     tutorialMsgWrapper.style.width = this.worldSize.width + 4 + 'px'
     tutorialMsgWrapper.style.top = '120px'
-
     message2.style.width = this.worldSize.width + 4 + 'px'
     message2.style.top = 65 + this.worldSize.height + 'px'
     tutorialMsgWrapper.append(message1)
+
     this.changeMessage(
       '#tut-msg-1',
       'Press SPACE to continue and ENTER to skip tutorial.',
@@ -49,11 +56,11 @@ export default class Tutorial extends DOMDisplay {
   }
 
   renderChildrenTut = () => {
-    while (this.settimeout.length) {
-      clearTimeout(this.settimeout.pop())
-    }
-    this.clearElement('#tut-msg-1')
-    if (this.legend) this.legend.style.display = 'block'
+    const legend = this.getElement('#legend')
+
+    this.clearPrevTut()
+
+    if (legend) legend.style.display = 'block'
 
     this.updateElement(
       '#tut-msg-0',
@@ -72,11 +79,7 @@ export default class Tutorial extends DOMDisplay {
   }
 
   renderPredatorTut = () => {
-    while (this.settimeout.length) {
-      clearTimeout(this.settimeout.pop())
-    }
-    this.clearElement('#tut-msg-1')
-
+    this.clearPrevTut()
     this.updateElement(
       '#tut-msg-0',
       "Watch out for predators. Nyan-chan didn't get fat eating grass."
@@ -94,10 +97,7 @@ export default class Tutorial extends DOMDisplay {
   }
 
   renderClickParentTut = () => {
-    while (this.settimeout.length) {
-      clearTimeout(this.settimeout.pop())
-    }
-    this.clearElement('#tut-msg-1')
+    this.clearPrevTut()
     this.updateElement(
       '#tut-msg-0',
       'CLICK to gather all your children in one place for the cheap price of half a worm.'
@@ -115,10 +115,7 @@ export default class Tutorial extends DOMDisplay {
   }
 
   renderWormTut = () => {
-    while (this.settimeout.length) {
-      clearTimeout(this.settimeout.pop())
-    }
-    this.clearElement('#tut-msg-1')
+    this.clearPrevTut()
     this.updateElement(
       '#tut-msg-0',
       'Replenish your energy by feasting on delicious worms.'

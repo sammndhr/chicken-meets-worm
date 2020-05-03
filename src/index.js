@@ -14,24 +14,13 @@ display.renderGame()
 display.renderTitle()
 display.renderWorld()
 
-const introDisplay = new Intro(
-  display.game,
-  display.worldWrapper,
-  display.worldSize
-)
+const introDisplay = new Intro(display.worldSize)
 
-const tutorialDisplay = new Tutorial(
-  display.game,
-  display.world,
-  display.worldWrapper,
-  display.worldSize,
-  display.legend
-)
+const tutorialDisplay = new Tutorial(display.worldSize)
 
 function handleClickTutorial() {
   const tutorialGame = new TutorialGame(tutorialDisplay)
   introDisplay.clearIntro()
-
   tutorialGame.initTutorial()
 }
 

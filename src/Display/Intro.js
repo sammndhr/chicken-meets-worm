@@ -2,11 +2,8 @@ import logo from '../imgs/logo.png'
 import DOMDisplay from './DOMDisplay'
 
 export default class Intro extends DOMDisplay {
-  constructor(game, worldWrapper, worldSize) {
+  constructor(worldSize) {
     super(worldSize)
-    this.game = game
-    this.worldWrapper = worldWrapper
-    this.introWrapper = null
   }
 
   renderTutorialButton = (handleClickTutorial) => {
@@ -24,16 +21,17 @@ export default class Intro extends DOMDisplay {
   }
 
   renderIntro = () => {
-    const introWrapper = this.createElement('div', 'intro-wrapper')
-    const introPic = this.createImage(logo, 'logo')
-    const intro = this.createElement('div', 'intro')
-    const introMessage = this.createElement(
-      'span',
-      'intro-message',
-      null,
-      'Feast on worms, protect your children!'
-    )
-    this.worldWrapper.append(introWrapper)
+    const introWrapper = this.createElement('div', 'intro-wrapper'),
+      introPic = this.createImage(logo, 'logo'),
+      intro = this.createElement('div', 'intro'),
+      introMessage = this.createElement(
+        'span',
+        'intro-message',
+        null,
+        'Feast on worms, protect your children!'
+      ),
+      worldWrapper = this.getElement('#world-wrapper')
+    worldWrapper.append(introWrapper)
 
     intro.append(introPic)
     intro.append(introMessage)
@@ -44,6 +42,7 @@ export default class Intro extends DOMDisplay {
   }
 
   clearIntro = () => {
-    this.worldWrapper.removeChild(this.introWrapper)
+    const worldWrapper = this.getElement('#world-wrapper')
+    worldWrapper.removeChild(this.introWrapper)
   }
 }
