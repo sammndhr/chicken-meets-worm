@@ -204,7 +204,12 @@ export default class MovingObject {
     let { x, y } = this.pos,
       pos = { x: x + this.currDir[0], y: y + this.currDir[1] }
 
-    if (this.checkOutOfBounds(pos)) this.bounceBack(pos)
+    while (this.checkOutOfBounds(pos)) {
+      this.setRandomDir()
+      pos = { x: x + this.currDir[0], y: y + this.currDir[1] }
+    }
+    // objects keep getting stuck at the wall
+    // if (this.checkOutOfBounds(pos)) this.bounceBack(pos)
 
     this.setPos(pos)
   }
